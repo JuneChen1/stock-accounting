@@ -23,11 +23,11 @@ router.post('/new', (req, res) => {
           // 沒有紀錄 => 新增
           if (!data) {
             Stock.create([{
-            symbol: req.body.symbol,
-            name: req.body.name,
-            shares,
-            value
-             }])
+              symbol: req.body.symbol,
+              name: req.body.name,
+              shares,
+              value
+            }])
           } else {
             // 有紀錄 => 加上 shares value
             data.shares += shares

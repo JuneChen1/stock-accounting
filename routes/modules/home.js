@@ -1,4 +1,4 @@
-const express= require('express')
+const express = require('express')
 const router = express.Router()
 const Stock = require('../../models/stock')
 const axios = require('axios').default
@@ -33,7 +33,6 @@ router.get('/', (req, res) => {
             console.log(error)
           })
       })
-      
       renderStoks.then(() => {
         stocks.forEach(stock => {
           // 平均成本
