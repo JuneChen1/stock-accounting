@@ -1,12 +1,12 @@
 const express = require('express')
-const { Aggregate } = require('mongoose')
 const router = express.Router()
 const Record = require('../../models/record')
 const Stock = require('../../models/stock')
+const axios = require('axios').default
 
 // 新增紀錄
 router.get('/new', (req, res) => {
-  res.render('new')
+  res.render('new', { newSymbol: true })
 })
 
 router.post('/new', (req, res) => {
@@ -39,6 +39,24 @@ router.post('/new', (req, res) => {
         .catch(err => console.log(err))
     })
     .catch(err => console.log(err))
+})
+
+// 搜尋名稱
+router.get('/search/:symbol', (req, res) => {
+  const symbol = req.params.symbol
+  const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
+  axios.get(BASE_URL + `tse_${symbol}.tw|`)
+    .then(function (response) {
+      const data = response.data.msgArray
+      if (data.length === 0) {
+        console.log('Cannot find the symbol.')
+        return res.render('new', { symbol, newSymbol: true })
+      }
+      const name = data[0].n
+      res.render('new', { symbol, name, newSymbol: true })
+    }).catch(function (error) {
+      console.log(error)
+    })
 })
 
 // 查看特定股票紀錄
