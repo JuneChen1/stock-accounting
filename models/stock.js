@@ -6,7 +6,8 @@ const stockSchema = new Schema({
     required: true
   },
   name: {
-    type: String
+    type: String,
+    required: true
   },
   shares: {
     type: Number,

@@ -1,0 +1,32 @@
+<div style="margin: 30px auto; padding: 0 8px; max-width: 1000px;">
+  <h2>{{ symbol }} {{ name }}</h2>
+  <table class="table table-striped" id="record-table">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 20%">紀錄</th>
+        <th scope="col" style="width: 20%">總額</th>
+        <th scope="col" style="width: 20%">股數</th>
+        <th scope="col" style="width: 30%">時間</th>
+        <th scope="col" style="width: 5%;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each stocks}}
+      <tr>
+        <th scope="row" class="method">{{ this.method }}</th>
+        <td class="value">{{ this.value }}</td>
+        <td class="shares">{{ this.shares }}</td>
+        <td class="date">{{ this.date }}</td>
+        <td>
+          <form action="/stocks/record/{{this._id}}?_method=DELETE" method="POST">
+            <button style="border: none; background-color: transparent;"><i class="fa-solid fa-trash-can"></i></button>
+          </form>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <a href="/stocks/new/{{ symbol }}">
+    <button type="button" class="btn btn-dark" id="add-button">新增</button>
+  </a>
+</div>
