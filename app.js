@@ -1,8 +1,13 @@
 const express = require('express')
 const app = express()
 const routes = require('./routes')
+const { create } = require('express-handlebars')
+const exphbs = create({ defaultLayout: 'main' })
 
 const port = 3000
+
+app.engine('handlebars', exphbs.engine)
+app.set('view engine', 'handlebars')
 
 app.use(routes)
 
