@@ -11,6 +11,7 @@ require('./config/mongoose')
 app.engine('handlebars', exphbs.engine)
 app.set('view engine', 'handlebars')
 
+app.use(express.urlencoded({ extended: true }))
 app.use(routes)
 
 app.listen(port, () => {
