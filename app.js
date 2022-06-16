@@ -6,6 +6,8 @@ const exphbs = create({ defaultLayout: 'main' })
 
 const port = 3000
 
+require('./config/mongoose')
+
 app.engine('handlebars', exphbs.engine)
 app.set('view engine', 'handlebars')
 
