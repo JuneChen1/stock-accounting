@@ -32,7 +32,7 @@ router.post('/new', (req, res) => {
             data.value += value
             data.save()
           }
-          res.redirect('/')
+          setTimeout(() => res.redirect('/'), 1000)
         })
         .catch(err => console.log(err))
     })

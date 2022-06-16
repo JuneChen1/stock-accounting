@@ -11,18 +11,20 @@
       </tr>
     </thead>
     <tbody>
+      {{#each stocks}}
       <tr>
         <th scope="row" class="name">
-          <a href="" target="_blank"style="text-decoration: none; color: black;">
-            symbol
+          <a href="/stocks/{{this.symbol}}" target="_blank" style="text-decoration: none; color: black;">
+            {{ this.symbol }}
           </a>
         </th>
-        <td class="name">name</td>
-        <td class="shares">shares</td>
-        <td class="cost">cost</td>
+        <td class="name">{{ this.name }}</td>
+        <td class="shares">{{ this.shares }}</td>
+        <td class="cost">{{ this.cost }}</td>
         <td class="price">price</td>
         <td class="profit">profit</td>
       </tr>
+      {{/each}}
     </tbody>
   </table>
   <a href="/stocks/new">
