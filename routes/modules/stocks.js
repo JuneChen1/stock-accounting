@@ -58,4 +58,34 @@ router.get('/:symbol', (req, res) => {
     .catch(err => console.log(err))
 })
 
+// 新增指定股票紀錄
+router.get('/new/:symbol', (req, res) => {
+  const symbol = req.params.symbol
+  Stock.findOne({ symbol })
+    .then(stock => res.render('new', { symbol, name: stock.name, theSymbol: true }))
+    .catch(err => console.log(err))
+})
+
+router.post('/new/:symbol', (req, res) => {
+  const symbol = req.params.symbol
+  Record.create(req.body)
+    .then(() => {
+      Stock.findOne({ symbol })
+        .then(data => {
+          let shares = Number(req.body.shares)
+          let value = Number(req.body.value)
+          if (req.body.method === '賣出') {
+            value = value * -1
+            shares = shares * -1
+          }
+          data.shares += shares
+          data.value += value
+          data.save()
+        })
+        .then(() => res.redirect(`/stocks/${symbol}`))
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+})
+
 module.exports = router
