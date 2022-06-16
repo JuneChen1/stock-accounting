@@ -1,1 +1,39 @@
-<h1>new page</h1>
+<div class="mx-auto my-5" style="width: 25%;">
+  <form action="/stocks/new/{{#if theSymbol}}{{symbol}}{{/if}}" method="POST">
+    <label for="symbol" class="form-label">股票代號：</label>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" name="symbol"
+        value="{{symbol}}" required>
+    </div>
+
+    <label for="name" class="form-label">股票名稱：</label>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="name" aria-describedby="basic-addon3" name="name" value="{{name}}">
+    </div>
+
+    <div class="input-group mb-3">
+      <label for="method" class="form-label">買入/賣出：</label>
+      <select class="form-select" id="method" style="width: 100%;" name="method">
+        <option selected value="買入">買入</option>
+        <option value="賣出">賣出</option>
+      </select>
+    </div>
+
+    <label for="value" class="form-label">總額：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" name="value">
+    </div>
+
+    <label for="shares" class="form-label">股數：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3" name="shares">
+    </div>
+
+    <label for="date" class="form-label">時間：</label>
+    <div class="input-group mb-3">
+      <input type="datetime-local" class="form-control" id="date" aria-describedby="basic-addon3" name="date" required>
+    </div>
+
+    <button type="submit" class="btn btn-dark mt-3">儲存</button>
+  </form>
+</div>
