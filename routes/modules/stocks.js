@@ -66,6 +66,9 @@ router.get('/:symbol', (req, res) => {
     .lean()
     .sort({ date: 'desc' })
     .then(stocks => {
+      if (stocks.length === 0) {
+        return res.redirect('/')
+      }
       stocks.forEach(stock => {
         stock.date = moment(stock.date).format('YYYY/MM/DD')
       })
@@ -101,6 +104,31 @@ router.post('/new/:symbol', (req, res) => {
         .then(() => res.redirect(`/stocks/${symbol}`))
         .catch(err => console.log(err))
     })
+    .catch(err => console.log(err))
+})
+
+// delete record
+router.delete('/:symbol/:id', (req, res) => {
+  const _id = req.params.id
+  const symbol = req.params.symbol
+  Record.findOne({ _id })
+    .then(record => {
+      let shares = Number(record.shares)
+      let value = Number(record.value)
+      if (record.method === '買入') {
+        value = value * -1
+        shares = shares * -1
+      }
+      Stock.findOne({ symbol })
+        .then(data => {
+          data.shares += shares
+          data.value += value
+          data.save()
+        })
+        .catch(err => console.log(err))
+      record.remove()
+    })
+    .then(() => res.redirect(`/stocks/${symbol}`))
     .catch(err => console.log(err))
 })
 

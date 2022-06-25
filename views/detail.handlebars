@@ -1,4 +1,4 @@
-<div style="margin: 30px auto; padding: 0 8px; max-width: 1000px;">
+<div style="margin: 30px auto; padding: 0 8px; max-width: 700px;">
   <h2>{{ symbol }} {{ name }}</h2>
   <table class="table table-striped" id="record-table">
     <thead>
@@ -6,7 +6,7 @@
         <th scope="col" style="width: 20%">紀錄</th>
         <th scope="col" style="width: 20%">總額</th>
         <th scope="col" style="width: 20%">股數</th>
-        <th scope="col" style="width: 30%">時間</th>
+        <th scope="col" style="width: 20%">時間</th>
         <th scope="col" style="width: 5%;"></th>
       </tr>
     </thead>
@@ -18,7 +18,7 @@
         <td class="shares">{{ this.shares }}</td>
         <td class="date">{{ this.date }}</td>
         <td>
-          <form action="/stocks/record/{{this._id}}?_method=DELETE" method="POST">
+          <form action="/stocks/{{ this.symbol }}/{{this._id}}?_method=DELETE" method="POST">
             <button style="border: none; background-color: transparent;"><i class="fa-solid fa-trash-can"></i></button>
           </form>
         </td>
