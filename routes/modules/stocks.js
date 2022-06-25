@@ -3,6 +3,7 @@ const router = express.Router()
 const Record = require('../../models/record')
 const Stock = require('../../models/stock')
 const axios = require('axios').default
+const moment = require('moment')
 
 // 新增紀錄
 router.get('/new', (req, res) => {
@@ -67,9 +68,7 @@ router.get('/:symbol', (req, res) => {
     .sort({ date: 'desc' })
     .then(stocks => {
       stocks.forEach(stock => {
-        const month = stock.date.getMonth() + 1
-        const detailDate = stock.date.toString().split(' ')
-        stock.date = `${detailDate[3]}-${month}-${detailDate[2]} ${detailDate[4]}`
+        stock.date = moment(stock.date).format('YYYY/MM/DD')
       })
       res.render('detail', { stocks, symbol, name: stocks[0].name })
     })
