@@ -13,12 +13,11 @@ router.get('/', (req, res) => {
       if (stocks.length === 0) {
         return res.render('index')
       }
-      // API 所需字串
+      // get market price
       let symbolString = ''
       stocks.forEach(stock => {
         symbolString += `tse_${stock.symbol}.tw|`
       })
-      // 取得市價
       const renderStoks = new Promise((resolve, reject) => {
         const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
         axios.get(BASE_URL + symbolString)
@@ -35,10 +34,10 @@ router.get('/', (req, res) => {
       })
       renderStoks.then(() => {
         stocks.forEach(stock => {
-          // 平均成本
+          // calculate average cost
           const cost = Math.round((stock.value / stock.shares) * 10) / 10
           stock.cost = cost
-          // 損益
+          // calculate profit and loss
           const profit = Math.round(((stock.price - cost) / cost) * 100) + '%'
           stock.profit = profit
         })

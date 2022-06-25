@@ -5,7 +5,7 @@ const Stock = require('../../models/stock')
 const axios = require('axios').default
 const moment = require('moment')
 
-// 新增紀錄
+// add new record
 router.get('/new', (req, res) => {
   res.render('new', { newSymbol: true })
 })
@@ -21,7 +21,7 @@ router.post('/new', (req, res) => {
             value = value * -1
             shares = shares * -1
           }
-          // 沒有紀錄 => 新增
+          // no current stock => add stock
           if (!data) {
             Stock.create([{
               symbol: req.body.symbol,
@@ -30,7 +30,7 @@ router.post('/new', (req, res) => {
               value
             }])
           } else {
-            // 有紀錄 => 加上 shares value
+            // already have stock => add shares and value
             data.shares += shares
             data.value += value
             data.save()
@@ -42,7 +42,7 @@ router.post('/new', (req, res) => {
     .catch(err => console.log(err))
 })
 
-// 搜尋名稱
+// search name by symbol
 router.get('/search/:symbol', (req, res) => {
   const symbol = req.params.symbol
   const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
@@ -60,7 +60,7 @@ router.get('/search/:symbol', (req, res) => {
     })
 })
 
-// 查看特定股票紀錄
+// records of specific stock
 router.get('/:symbol', (req, res) => {
   const symbol = req.params.symbol
   Record.find({ symbol: req.params.symbol })
@@ -75,7 +75,7 @@ router.get('/:symbol', (req, res) => {
     .catch(err => console.log(err))
 })
 
-// 新增指定股票紀錄
+// add record of current stock
 router.get('/new/:symbol', (req, res) => {
   const symbol = req.params.symbol
   Stock.findOne({ symbol })
