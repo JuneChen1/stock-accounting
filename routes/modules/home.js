@@ -28,8 +28,7 @@ router.get('/', (req, res) => {
             }
             resolve()
           }).catch(function (error) {
-            reject(Error)
-            console.log(error)
+            reject(error)
           })
       })
         .then(() => {
@@ -39,9 +38,12 @@ router.get('/', (req, res) => {
             stock.cost = cost
             // calculate profit and loss
             const profit = Math.round(((stock.price - cost) / cost) * 100) + '%'
-            stock.profit = profit
+            stock.profit = profit !== 'NaN%' ? profit : ''
           })
           res.render('index', { stocks })
+        })
+        .catch(error => {
+          console.log(error)
         })
     })
 })
