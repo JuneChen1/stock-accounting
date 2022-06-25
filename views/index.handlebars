@@ -1,13 +1,14 @@
-<div style="margin: 30px auto; padding: 0 8px; max-width: 900px;">
+<div style="margin: 30px auto; padding: 0 8px; max-width: 1000px;">
   <table class="table table-striped" id="record-table">
     <thead>
       <tr>
-        <th scope="col" style="width: 12%">代號</th>
-        <th scope="col" style="width: 20%">名稱</th>
-        <th scope="col" style="width: 15%">持有股數</th>
-        <th scope="col" style="width: 15%">平均成本</th>
-        <th scope="col" style="width: 15%">市價</th>
-        <th scope="col" style="width: 15%">損益</th>
+        <th scope="col" style="width: 11%">代號</th>
+        <th scope="col" style="width: 18%">名稱</th>
+        <th scope="col" style="width: 13%">持有股數</th>
+        <th scope="col" style="width: 13%">成本均價</th>
+        <th scope="col" style="width: 13%">市價</th>
+        <th scope="col" style="width: 13%">損益</th>
+        <th scope="col" style="width: 13%">報酬率</th>
       </tr>
     </thead>
     <tbody>
@@ -22,7 +23,8 @@
         <td class="shares">{{ this.shares }}</td>
         <td class="cost">{{ this.cost }}</td>
         <td class="price">{{ this.price }}</td>
-        <td class="profit">{{ this.profit }}</td>
+        <td class="price">{{ this.profit }}</td>
+        <td class="profit">{{ this.roi }}</td>
       </tr>
       {{/each}}
     </tbody>

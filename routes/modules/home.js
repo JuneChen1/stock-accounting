@@ -37,8 +37,11 @@ router.get('/', (req, res) => {
             const cost = Math.round((stock.value / stock.shares) * 10) / 10
             stock.cost = cost
             // calculate profit and loss
-            const profit = Math.round(((stock.price - cost) / cost) * 100) + '%'
-            stock.profit = profit !== 'NaN%' ? profit : ''
+            const profit = Math.round((stock.price * stock.shares - stock.value) * 10) / 10
+            stock.profit = profit
+            // calculate ROI
+            const roi = Math.round(((stock.price - cost) / cost) * 100) + '%'
+            stock.roi = roi !== 'NaN%' ? roi : ''
           })
           res.render('index', { stocks })
         })
