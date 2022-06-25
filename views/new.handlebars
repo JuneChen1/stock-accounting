@@ -1,12 +1,16 @@
 <div class="mx-auto my-5" style="width: 25%;">
   <form action="/stocks/new/{{#if theSymbol}}{{ symbol }}{{/if}}" method="POST">
     <label for="symbol" class="form-label">股票代號：</label>
-    <div class="input-group mb-3">
+    <div class="input-group">
       <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" 
       name="symbol" value="{{ symbol }}" {{#if theSymbol}}  readonly="readonly" {{/if}} required>
     </div>
 
-    <label for="name" class="form-label">股票名稱：</label>
+    {{#if errorSymbol}}
+      <div style="color: #c81921;" class="mt-1">找不到股票代號：{{ errorSymbol }}</div>
+    {{/if}}
+
+    <label for="name" class="form-label mt-3">股票名稱：</label>
     {{#if newSymbol}}
      <button type="button" class="btn btn-link btn-sm" onclick="searchName()">搜尋名稱</button>
      <span style="font-size: small;">(輸入代號搜尋名稱)</span>

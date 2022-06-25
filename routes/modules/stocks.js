@@ -50,8 +50,7 @@ router.get('/search/:symbol', (req, res) => {
     .then(function (response) {
       const data = response.data.msgArray
       if (data.length === 0) {
-        console.log('Cannot find the symbol.')
-        return res.render('new', { symbol, newSymbol: true })
+        return res.render('new', { symbol, newSymbol: true, errorSymbol: symbol })
       }
       const name = data[0].n
       res.render('new', { symbol, name, newSymbol: true })
