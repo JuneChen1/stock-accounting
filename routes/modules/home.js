@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   const stocks = data.filter(stock => stock.shares !== 0)
   const total = {
     marketCap: 0,
-    amount: 0,
+    amount: 0
   }
   if (stocks.length === 0) {
     return res.render('index')
