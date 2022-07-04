@@ -1,4 +1,25 @@
 <div style="margin: 30px auto; padding: 0 8px; max-width: 1000px;">
+  <div class="card bg-light mb-4" style="width: 55%;">
+    <div class="card-body d-flex justify-content-between">
+      <div style="width: 25%;">
+        <h4>總市值</h4>
+        <h5>{{ total.marketCap }}</h5>
+      </div>
+      <div style="width: 25%;">
+        <h4>總成本</h4>
+        <h5>{{ total.amount }}</h5>
+      </div>
+      <div style="width: 25%;">
+        <h4>總損益</h4>
+        <h5>{{ total.profit }}</h5>
+      </div>
+      <div style="width: 25%;">
+        <h4>總報酬率</h4>
+        <h5>{{ total.roi }}</h5>
+      </div>
+    </div>
+  </div>
+  
   <table class="table table-striped" id="record-table">
     <thead>
       <tr>

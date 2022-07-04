@@ -6,6 +6,10 @@ const axios = require('axios').default
 router.get('/', async (req, res) => {
   const data = await Stock.find().lean().sort({ symbol: 'asc' })
   const stocks = data.filter(stock => stock.shares !== 0)
+  const total = {
+    marketCap: 0,
+    amount: 0,
+  }
   if (stocks.length === 0) {
     return res.render('index')
   }
@@ -34,8 +38,16 @@ router.get('/', async (req, res) => {
     // calculate ROI
     const roi = (Math.round(((stock.price - cost) / cost) * 100)).toString() + '%'
     stock.roi = roi !== 'NaN%' ? roi : ''
+    // caculate total marketCap & amount
+    if (stock.price.toString() !== 'NaN') {
+      total.marketCap += stock.shares * stock.price
+      total.amount += stock.value
+    }
   })
-  res.render('index', { stocks })
+  total.marketCap = Math.round(total.marketCap)
+  total.profit = total.marketCap - total.amount
+  total.roi = (Math.round(((total.marketCap - total.amount) / total.amount) * 100)).toString() + '%'
+  res.render('index', { stocks, total })
 })
 
 module.exports = router
