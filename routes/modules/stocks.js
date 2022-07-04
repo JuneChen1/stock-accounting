@@ -10,36 +10,30 @@ router.get('/new', (req, res) => {
   res.render('new', { newSymbol: true })
 })
 
-router.post('/new', (req, res) => {
-  Record.create(req.body)
-    .then(() => {
-      Stock.findOne({ symbol: req.body.symbol })
-        .then(data => {
-          let shares = Number(req.body.shares)
-          let value = Number(req.body.value)
-          if (req.body.method === '賣出') {
-            value = value * -1
-            shares = shares * -1
-          }
-          // no current stock => add stock
-          if (!data) {
-            Stock.create([{
-              symbol: req.body.symbol,
-              name: req.body.name,
-              shares,
-              value
-            }])
-          } else {
-            // already have stock => add shares and value
-            data.shares += shares
-            data.value += value
-            data.save()
-          }
-          setTimeout(() => res.redirect('/'), 1000)
-        })
-        .catch(err => console.log(err))
-    })
-    .catch(err => console.log(err))
+router.post('/new', async (req, res) => {
+  await Record.create(req.body)
+  let shares = Number(req.body.shares)
+  let value = Number(req.body.value)
+  if (req.body.method === '賣出') {
+    value = value * -1
+    shares = shares * -1
+  }
+  const data = await Stock.findOne({ symbol: req.body.symbol })
+  // no current stock => add stock
+  if (!data) {
+    await Stock.create([{
+      symbol: req.body.symbol,
+      name: req.body.name,
+      shares,
+      value
+    }])
+  } else {
+    // already have stock => add shares and value
+    data.shares += shares
+    data.value += value
+    await data.save()
+  }
+  res.redirect('/')
 })
 
 // search name by symbol
@@ -85,51 +79,39 @@ router.get('/new/:symbol', (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.post('/new/:symbol', (req, res) => {
+router.post('/new/:symbol', async (req, res) => {
   const symbol = req.params.symbol
-  Record.create(req.body)
-    .then(() => {
-      Stock.findOne({ symbol })
-        .then(data => {
-          let shares = Number(req.body.shares)
-          let value = Number(req.body.value)
-          if (req.body.method === '賣出') {
-            value = value * -1
-            shares = shares * -1
-          }
-          data.shares += shares
-          data.value += value
-          data.save()
-        })
-        .then(() => res.redirect(`/stocks/${symbol}`))
-        .catch(err => console.log(err))
-    })
-    .catch(err => console.log(err))
+  await Record.create(req.body)
+  const data = await Stock.findOne({ symbol })
+  let shares = Number(req.body.shares)
+  let value = Number(req.body.value)
+  if (req.body.method === '賣出') {
+    value = value * -1
+    shares = shares * -1
+  }
+  data.shares += shares
+  data.value += value
+  await data.save()
+  res.redirect(`/stocks/${symbol}`)
 })
 
 // delete record
-router.delete('/:symbol/:id', (req, res) => {
+router.delete('/:symbol/:id', async (req, res) => {
   const _id = req.params.id
   const symbol = req.params.symbol
-  Record.findOne({ _id })
-    .then(record => {
-      let shares = Number(record.shares)
-      let value = Number(record.value)
-      if (record.method === '買入') {
-        value = value * -1
-        shares = shares * -1
-      }
-      Stock.findOne({ symbol })
-        .then(data => {
-          data.shares += shares
-          data.value += value
-          data.save()
-        })
-        .catch(err => console.log(err))
-      record.remove()
-    })
-    .then(() => res.redirect(`/stocks/${symbol}`))
-    .catch(err => console.log(err))
+  const record = await Record.findOne({ _id })
+  let shares = Number(record.shares)
+  let value = Number(record.value)
+  if (record.method === '買入') {
+    value = value * -1
+    shares = shares * -1
+  }
+  const data = await Stock.findOne({ symbol })
+  data.shares += shares
+  data.value += value
+  await data.save()
+  await record.remove()
+  res.redirect(`/stocks/${symbol}`)
 })
 
 module.exports = router
