@@ -3,52 +3,39 @@ const router = express.Router()
 const Stock = require('../../models/stock')
 const axios = require('axios').default
 
-router.get('/', (req, res) => {
-  let stocks = []
-  Stock.find()
-    .lean()
-    .sort({ symbol: 'asc' })
-    .then(data => {
-      stocks = data.filter(stock => stock.shares !== 0)
-      if (stocks.length === 0) {
-        return res.render('index')
+router.get('/', async (req, res) => {
+  const data = await Stock.find().lean().sort({ symbol: 'asc' })
+  const stocks = data.filter(stock => stock.shares !== 0)
+  if (stocks.length === 0) {
+    return res.render('index')
+  }
+  // get market price
+  let symbolString = ''
+  stocks.forEach(stock => {
+    symbolString += `tse_${stock.symbol}.tw|`
+  })
+  const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
+  await axios.get(BASE_URL + symbolString)
+    .then(function (response) {
+      const dataArray = response.data.msgArray
+      for (let i = 0; i < dataArray.length; i++) {
+        stocks[i].price = Math.floor(dataArray[i].z * 100) / 100
       }
-      // get market price
-      let symbolString = ''
-      stocks.forEach(stock => {
-        symbolString += `tse_${stock.symbol}.tw|`
-      })
-      new Promise((resolve, reject) => {
-        const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
-        axios.get(BASE_URL + symbolString)
-          .then(function (response) {
-            const dataArray = response.data.msgArray
-            for (let i = 0; i < dataArray.length; i++) {
-              stocks[i].price = Math.floor(dataArray[i].z * 100) / 100
-            }
-            resolve()
-          }).catch(function (error) {
-            reject(error)
-          })
-      })
-        .then(() => {
-          stocks.forEach(stock => {
-            // calculate average cost
-            const cost = Math.round((stock.value / stock.shares) * 10) / 10
-            stock.cost = cost
-            // calculate profit and loss
-            const profit = Math.round((stock.price * stock.shares - stock.value) * 10) / 10
-            stock.profit = profit
-            // calculate ROI
-            const roi = Math.round(((stock.price - cost) / cost) * 100) + '%'
-            stock.roi = roi !== 'NaN%' ? roi : ''
-          })
-          res.render('index', { stocks })
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    }).catch(function (error) {
+      console.log(error)
     })
+  stocks.forEach(stock => {
+    // calculate average cost
+    const cost = Math.round((stock.value / stock.shares) * 10) / 10
+    stock.cost = cost
+    // calculate profit and loss
+    const profit = Math.round((stock.price * stock.shares - stock.value) * 10) / 10
+    stock.profit = profit
+    // calculate ROI
+    const roi = Math.round(((stock.price - cost) / cost) * 100) + '%'
+    stock.roi = roi !== 'NaN%' ? roi : ''
+  })
+  res.render('index', { stocks })
 })
 
 module.exports = router
