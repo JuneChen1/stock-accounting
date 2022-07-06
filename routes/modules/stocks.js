@@ -11,27 +11,28 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
-  await Record.create(req.body)
-  let shares = Number(req.body.shares)
-  let value = Number(req.body.value)
-  if (req.body.method === '賣出') {
+  let { symbol, name, method, value, shares, date } = req.body
+  await Record.create({ symbol, name, method, value, shares, date })
+  shares = Number(shares)
+  value = Number(value)
+  if (method === '賣出') {
     value = value * -1
     shares = shares * -1
   }
-  const data = await Stock.findOne({ symbol: req.body.symbol })
+  const currentStock = await Stock.findOne({ symbol })
   // no current stock => add stock
-  if (!data) {
+  if (!currentStock) {
     await Stock.create([{
-      symbol: req.body.symbol,
-      name: req.body.name,
+      symbol,
+      name,
       shares,
       value
     }])
   } else {
     // already have stock => add shares and value
-    data.shares += shares
-    data.value += value
-    await data.save()
+    currentStock.shares += shares
+    currentStock.value += value
+    await currentStock.save()
   }
   res.redirect('/')
 })
@@ -81,17 +82,18 @@ router.get('/new/:symbol', (req, res) => {
 
 router.post('/new/:symbol', async (req, res) => {
   const symbol = req.params.symbol
-  await Record.create(req.body)
-  const data = await Stock.findOne({ symbol })
-  let shares = Number(req.body.shares)
-  let value = Number(req.body.value)
-  if (req.body.method === '賣出') {
+  let { name, method, value, shares, date } = req.body
+  await Record.create({ symbol, name, method, value, shares, date })
+  const currentStock = await Stock.findOne({ symbol })
+  shares = Number(shares)
+  value = Number(value)
+  if (method === '賣出') {
     value = value * -1
     shares = shares * -1
   }
-  data.shares += shares
-  data.value += value
-  await data.save()
+  currentStock.shares += shares
+  currentStock.value += value
+  await currentStock.save()
   res.redirect(`/stocks/${symbol}`)
 })
 
