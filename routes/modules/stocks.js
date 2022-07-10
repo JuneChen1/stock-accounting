@@ -12,6 +12,10 @@ router.get('/new', (req, res) => {
 
 router.post('/new', async (req, res) => {
   let { symbol, name, method, value, shares, date } = req.body
+  if (!symbol || !name || !method || !date) {
+    console.log('symbol, name, method, date are required')
+    return res.redirect('back')
+  }
   await Record.create({ symbol, name, method, value, shares, date })
   shares = Number(shares)
   value = Number(value)
@@ -83,6 +87,10 @@ router.get('/new/:symbol', (req, res) => {
 router.post('/new/:symbol', async (req, res) => {
   const symbol = req.params.symbol
   let { name, method, value, shares, date } = req.body
+  if (!symbol || !name || !method || !date) {
+    console.log('symbol, name, method, date are required')
+    return res.redirect('back')
+  }
   await Record.create({ symbol, name, method, value, shares, date })
   const currentStock = await Stock.findOne({ symbol })
   shares = Number(shares)
