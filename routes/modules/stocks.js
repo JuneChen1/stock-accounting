@@ -4,6 +4,7 @@ const Record = require('../../models/record')
 const Stock = require('../../models/stock')
 const axios = require('axios').default
 const moment = require('moment')
+const updateStock = require('../../helper/update-stock')
 
 // add new record
 router.get('/new', (req, res) => {
@@ -11,18 +12,12 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
-  let { symbol, name, method, value, shares, date } = req.body
+  const { symbol, name, method, value, shares, date } = req.body
   if (!symbol || !name || !method || !date) {
     console.log('symbol, name, method, date are required')
     return res.redirect('back')
   }
   await Record.create({ symbol, name, method, value, shares, date })
-  shares = Number(shares)
-  value = Number(value)
-  if (method === '賣出') {
-    value = value * -1
-    shares = shares * -1
-  }
   const currentStock = await Stock.findOne({ symbol })
   // no current stock => add stock
   if (!currentStock) {
@@ -33,10 +28,8 @@ router.post('/new', async (req, res) => {
       value
     }])
   } else {
-    // already have stock => add shares and value
-    currentStock.shares += shares
-    currentStock.value += value
-    await currentStock.save()
+    // already have stock => update stock
+    await updateStock(symbol)
   }
   res.redirect('/')
 })
@@ -86,22 +79,13 @@ router.get('/new/:symbol', (req, res) => {
 
 router.post('/new/:symbol', async (req, res) => {
   const symbol = req.params.symbol
-  let { name, method, value, shares, date } = req.body
+  const { name, method, value, shares, date } = req.body
   if (!symbol || !name || !method || !date) {
     console.log('symbol, name, method, date are required')
     return res.redirect('back')
   }
   await Record.create({ symbol, name, method, value, shares, date })
-  const currentStock = await Stock.findOne({ symbol })
-  shares = Number(shares)
-  value = Number(value)
-  if (method === '賣出') {
-    value = value * -1
-    shares = shares * -1
-  }
-  currentStock.shares += shares
-  currentStock.value += value
-  await currentStock.save()
+  await updateStock(symbol)
   res.redirect(`/stocks/${symbol}`)
 })
 
@@ -110,17 +94,8 @@ router.delete('/:symbol/:id', async (req, res) => {
   const _id = req.params.id
   const symbol = req.params.symbol
   const record = await Record.findOne({ _id })
-  let shares = Number(record.shares)
-  let value = Number(record.value)
-  if (record.method === '買入') {
-    value = value * -1
-    shares = shares * -1
-  }
-  const data = await Stock.findOne({ symbol })
-  data.shares += shares
-  data.value += value
-  await data.save()
   await record.remove()
+  await updateStock(symbol)
   res.redirect(`/stocks/${symbol}`)
 })
 
