@@ -23,7 +23,11 @@ router.get('/', async (req, res) => {
     .then(function (response) {
       const dataArray = response.data.msgArray
       for (let i = 0; i < dataArray.length; i++) {
-        stocks[i].price = Math.floor(dataArray[i].z * 100) / 100
+        let price = dataArray[i].z
+        if (price === '-') {
+          price = dataArray[i].y
+        }
+        stocks[i].price = Math.floor(price * 100) / 100
       }
     }).catch(function (error) {
       console.log(error)
