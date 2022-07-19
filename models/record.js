@@ -14,10 +14,12 @@ const recordSchema = new Schema({
     required: true
   },
   value: {
-    type: Number
+    type: Number,
+    default: 0
   },
   shares: {
-    type: Number
+    type: Number,
+    default: 0
   },
   date: {
     type: Date,

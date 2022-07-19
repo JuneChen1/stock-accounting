@@ -1,0 +1,53 @@
+<div class="mx-auto my-5" style="width: 25%;">
+  <form action="/stocks/new/{{ symbol }}" method="POST">
+    <label for="symbol" class="form-label">股票代號：</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" name="symbol" value="{{ symbol }}"
+        readonly="readonly" required>
+    </div>
+    
+    <label for="name" class="form-label mt-3">股票名稱：</label>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="name" aria-describedby="basic-addon3" name="name" value="{{ name }}"
+        readonly="readonly" required>
+    </div>
+    
+    <div class="input-group mb-3">
+      <label for="method" class="form-label">股利：</label>
+      <select class="form-select" id="method" style="width: 100%;" name="method" onchange="renderPage()">
+        <option {{#if cash}}selected{{/if}} value="現金股利">現金股利</option>
+        <option {{#if stock}}selected{{/if}} value="股票股利">股票股利</option>
+      </select>
+    </div>
+
+    <script>
+      function renderPage() {
+        const method = document.getElementById('method').value
+        const symbol = document.getElementById('symbol').value
+        if (method === '現金股利') return document.location.href = `/stocks/cashdividend/${symbol}`
+        document.location.href = `/stocks/stockdividend/${symbol}`
+      }
+    </script>
+
+    {{#if cash}}
+    <label for="value" class="form-label">總額：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" name="value">
+    </div>
+    {{/if}}
+
+    {{#if stock}}
+    <label for="shares" class="form-label">股數：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3" name="shares">
+    </div>
+    {{/if}}
+
+    <label for="date" class="form-label">時間：</label>
+    <div class="input-group mb-3">
+      <input type="datetime-local" class="form-control" id="date" aria-describedby="basic-addon3" name="date" required>
+    </div>
+
+    <button type="submit" class="btn btn-dark mt-3">儲存</button>
+  </form>
+</div>
