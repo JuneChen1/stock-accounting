@@ -16,6 +16,10 @@ function updateStock (symbol) {
           shares -= record.shares
           return
         }
+        if (record.method === '現金股利' ) {
+          value -= record.value
+          return
+        }
         value += record.value
         shares += record.shares
       })
