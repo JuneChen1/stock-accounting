@@ -51,33 +51,15 @@ router.get('/search/:symbol', (req, res) => {
     })
 })
 
-// records of specific stock
-router.get('/:symbol', (req, res) => {
-  const symbol = req.params.symbol
-  Record.find({ symbol: req.params.symbol })
-    .lean()
-    .sort({ date: 'desc' })
-    .then(stocks => {
-      if (stocks.length === 0) {
-        return res.redirect('/')
-      }
-      stocks.forEach(stock => {
-        stock.date = moment(stock.date).format('YYYY/MM/DD')
-      })
-      res.render('detail', { stocks, symbol, name: stocks[0].name })
-    })
-    .catch(err => console.log(err))
-})
-
 // add record of current stock
-router.get('/new/:symbol', (req, res) => {
+router.get('/:symbol/new', (req, res) => {
   const symbol = req.params.symbol
   Stock.findOne({ symbol })
     .then(stock => res.render('new', { symbol, name: stock.name, theSymbol: true }))
     .catch(err => console.warn(err))
 })
 
-router.post('/new/:symbol', async (req, res) => {
+router.post('/:symbol/new', async (req, res) => {
   const symbol = req.params.symbol
   const { name, method, value, shares, date } = req.body
   if (!symbol || !name || !method || !date) {
@@ -113,6 +95,24 @@ router.delete('/:symbol/:id', async (req, res) => {
   await record.remove()
   await updateStock(symbol)
   res.redirect(`/stocks/${symbol}`)
+})
+
+// records of specific stock
+router.get('/:symbol', (req, res) => {
+  const symbol = req.params.symbol
+  Record.find({ symbol: req.params.symbol })
+    .lean()
+    .sort({ date: 'desc' })
+    .then(stocks => {
+      if (stocks.length === 0) {
+        return res.redirect('/')
+      }
+      stocks.forEach(stock => {
+        stock.date = moment(stock.date).format('YYYY/MM/DD')
+      })
+      res.render('detail', { stocks, symbol, name: stocks[0].name })
+    })
+    .catch(err => console.log(err))
 })
 
 module.exports = router
