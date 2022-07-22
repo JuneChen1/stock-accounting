@@ -12,10 +12,14 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
-  const { symbol, name, method, value, shares, date } = req.body
+  let { symbol, name, method, value, shares, date } = req.body
   if (!symbol || !name || !method || !date) {
     console.log('symbol, name, method, date are required')
     return res.redirect('back')
+  }
+  if (method === '賣出') {
+    value = value * -1
+    shares = shares * -1
   }
   await Record.create({ symbol, name, method, value, shares, date })
   const currentStock = await Stock.findOne({ symbol })
@@ -61,10 +65,14 @@ router.get('/:symbol/new', (req, res) => {
 
 router.post('/:symbol/new', async (req, res) => {
   const symbol = req.params.symbol
-  const { name, method, value, shares, date } = req.body
+  let { name, method, value, shares, date } = req.body
   if (!symbol || !name || !method || !date) {
     console.log('symbol, name, method, date are required')
     return res.redirect('back')
+  }
+  if (method === '賣出') {
+    value = value * -1
+    shares = shares * -1
   }
   await Record.create({ symbol, name, method, value, shares, date })
   await updateStock(symbol)
@@ -80,7 +88,7 @@ router.get('/:symbol/dividend', (req, res) => {
 })
 
 router.post('/dividend/new', async (req, res) => {
-  let { symbol, name, value, shares, date } = req.body
+  const { symbol, name, value, shares, date } = req.body
   const method = '股利'
   await Record.create({ symbol, name, method, value, shares, date })
   await updateStock(symbol)

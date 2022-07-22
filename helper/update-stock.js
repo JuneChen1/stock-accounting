@@ -11,12 +11,7 @@ function updateStock (symbol) {
       let value = 0
       let shares = 0
       records.forEach(record => {
-        if (record.method === '賣出') {
-          value -= record.value
-          shares -= record.shares
-          return
-        }
-        if (record.method === '現金股利' ) {
+        if (record.method === '現金股利') {
           value -= record.value
           return
         }
