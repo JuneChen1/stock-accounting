@@ -89,6 +89,22 @@ router.post('/new/:symbol', async (req, res) => {
   res.redirect(`/stocks/${symbol}`)
 })
 
+// add dividend
+router.get('/:symbol/dividend', (req, res) => {
+  const symbol = req.params.symbol
+  Stock.findOne({ symbol })
+    .then(stock => res.render('dividend', { symbol, name: stock.name }))
+    .catch(err => console.warn(err))
+})
+
+router.post('/dividend/new', async (req, res) => {
+  let { symbol, name, value, shares, date } = req.body
+  const method = '股利'
+  await Record.create({ symbol, name, method, value, shares, date })
+  await updateStock(symbol)
+  res.redirect(`/stocks/${symbol}`)
+})
+
 // delete record
 router.delete('/:symbol/:id', async (req, res) => {
   const _id = req.params.id
@@ -97,21 +113,6 @@ router.delete('/:symbol/:id', async (req, res) => {
   await record.remove()
   await updateStock(symbol)
   res.redirect(`/stocks/${symbol}`)
-})
-
-// add dividend
-router.get('/cashdividend/:id', (req, res) => {
-  const symbol = req.params.id
-  Stock.findOne({ symbol })
-    .then(stock => res.render('dividend', { symbol, name: stock.name, cash: true }))
-    .catch(err => console.warn(err))
-})
-
-router.get('/stockdividend/:id', (req, res) => {
-  const symbol = req.params.id
-  Stock.findOne({ symbol })
-    .then(stock => res.render('dividend', { symbol, name: stock.name, stock: true }))
-    .catch(err => console.warn(err))
 })
 
 module.exports = router
