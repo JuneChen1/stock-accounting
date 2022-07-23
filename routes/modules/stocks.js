@@ -87,7 +87,7 @@ router.get('/:symbol/dividend', (req, res) => {
     .catch(err => console.warn(err))
 })
 
-router.post('/dividend/new', async (req, res) => {
+router.post('/:symbol/dividend/new', async (req, res) => {
   const { symbol, name, value, shares, date } = req.body
   const method = '股利'
   await Record.create({ symbol, name, method, value, shares, date })
@@ -108,17 +108,17 @@ router.delete('/:symbol/:id', async (req, res) => {
 // records of specific stock
 router.get('/:symbol', (req, res) => {
   const symbol = req.params.symbol
-  Record.find({ symbol: req.params.symbol })
+  Record.find({ symbol })
     .lean()
     .sort({ date: 'desc' })
-    .then(stocks => {
-      if (stocks.length === 0) {
+    .then(records => {
+      if (records.length === 0) {
         return res.redirect('/')
       }
-      stocks.forEach(stock => {
-        stock.date = moment(stock.date).format('YYYY/MM/DD')
+      records.forEach(record => {
+        record.date = moment(record.date).format('YYYY/MM/DD')
       })
-      res.render('detail', { stocks, symbol, name: stocks[0].name })
+      res.render('detail', { records, symbol, name: records[0].name })
     })
     .catch(err => console.log(err))
 })

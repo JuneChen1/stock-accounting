@@ -1,5 +1,5 @@
 <div class="mx-auto my-5" style="width: 25%;">
-  <form action="/stocks/dividend/new" method="POST">
+  <form action="/stocks/{{ symbol }}/dividend/new" method="POST">
     <label for="symbol" class="form-label">股票代號：</label>
     <div class="input-group">
       <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" name="symbol" value="{{ symbol }}"
