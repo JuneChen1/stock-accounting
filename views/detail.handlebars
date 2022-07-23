@@ -19,7 +19,9 @@
         <td class="date">{{ this.date }}</td>
         <td>
           <form action="/stocks/{{ this.symbol }}/{{this._id}}?_method=DELETE" method="POST">
-            <button style="border: none; background-color: transparent;"><i class="fa-solid fa-trash-can"></i></button>
+            <button style="border: none; background-color: transparent;" onclick="return confirm(`確定刪除？`)">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
           </form>
         </td>
       </tr>
