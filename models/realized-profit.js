@@ -9,13 +9,21 @@ const realizedSchema = new Schema({
     type: String,
     required: true
   },
-  value: {
+  cost: {
     type: Number,
-    default: 0
+    required: true
+  },
+  profit: {
+    type: Number,
+    required: true
+  },
+  roi: {
+    type: String,
+    required: true
   },
   date: {
     type: Date,
-    required: true
+    default: Date.now
   }
 })
 

@@ -1,5 +1,6 @@
 const Stock = require('../models/stock')
 const Record = require('../models/record')
+const Realized = require('../models/realized-profit')
 
 function updateStock (symbol) {
   return Promise.all([
@@ -20,6 +21,20 @@ function updateStock (symbol) {
       })
       stock.value = value
       stock.shares = shares
+      // realized profit
+      if (stock.shares === 0) {
+        let cost = 0
+        stock.remove()
+        records.forEach(record => {
+          if (record.value > 0) {
+            cost += record.value
+          }
+          record.remove()
+        })
+        const profit = value * -1
+        const roi = (Math.round((profit / cost) * 100)).toString() + '%'
+        return Realized.create({ symbol, name: stock.name, cost, profit,roi })
+      }
       stock.save()
     })
     .catch(err => console.warn(err))

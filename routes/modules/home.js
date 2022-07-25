@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
     // calculate ROI
     const roi = (Math.round(((stock.price - cost) / cost) * 100)).toString() + '%'
     stock.roi = roi !== 'NaN%' ? roi : ''
-    // caculate total marketCap & amount
+    // calculate total marketCap & amount
     if (stock.price.toString() !== 'NaN') {
       total.marketCap += stock.shares * stock.price
       total.amount += stock.value
