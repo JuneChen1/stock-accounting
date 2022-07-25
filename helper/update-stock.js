@@ -33,7 +33,7 @@ function updateStock (symbol) {
         })
         const profit = value * -1
         const roi = (Math.round((profit / cost) * 100)).toString() + '%'
-        return Realized.create({ symbol, name: stock.name, cost, profit,roi })
+        return Realized.create({ symbol, name: stock.name, cost, profit, roi })
       }
       stock.save()
     })
