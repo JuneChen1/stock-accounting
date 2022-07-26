@@ -19,22 +19,24 @@ function updateStock (symbol) {
         value += record.value
         shares += record.shares
       })
-      stock.value = value
-      stock.shares = shares
       // realized profit
-      if (stock.shares === 0) {
-        let cost = 0
+      if (shares === 0) {
         stock.remove()
+        let cost = 0
         records.forEach(record => {
           if (record.value > 0) {
             cost += record.value
           }
-          record.remove()
         })
         const profit = value * -1
         const roi = (Math.round((profit / cost) * 100)).toString() + '%'
-        return Realized.create({ symbol, name: stock.name, cost, profit, roi })
+        return Promise.all([
+          Record.deleteMany({ symbol }),
+          Realized.create({ symbol, name: stock.name, cost, profit, roi })
+        ])
       }
+      stock.value = value
+      stock.shares = shares
       stock.save()
     })
     .catch(err => console.warn(err))
