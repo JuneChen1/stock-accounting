@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Record = require('../../models/record')
 const Stock = require('../../models/stock')
+const Realized = require('../../models/realized-profit')
 const axios = require('axios').default
 const moment = require('moment')
 const updateStock = require('../../helper/update-stock')
@@ -53,6 +54,27 @@ router.get('/search/:symbol', (req, res) => {
     }).catch(function (error) {
       console.log(error)
     })
+})
+
+// realized profit page
+router.get('/realizedprofit', (req, res) => {
+  Realized.find()
+    .lean()
+    .sort({ date: 'desc' })
+    .then(records => {
+      const total = {
+        cost: 0,
+        profit: 0
+      }
+      records.forEach(record => {
+        total.cost += record.cost
+        total.profit += record.profit
+        record.date = moment(record.date).format('YYYY/MM/DD')
+      })
+      total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
+      res.render('realizedprofit', { records, total, realized: true })
+    })
+    .catch(err => console.warn(err))
 })
 
 // add record of current stock

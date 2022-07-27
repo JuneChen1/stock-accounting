@@ -12,7 +12,12 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">股票</a>
+      <a class="navbar-brand" href="/">股票記帳</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {{#if realized}} active {{/if}}" href="/stocks/realizedprofit">已實現損益</a>
+        </li>
+      </ul>
     </div>
   </nav>
 
