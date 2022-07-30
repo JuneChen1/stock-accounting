@@ -6,9 +6,7 @@
       name="symbol" value="{{ symbol }}" {{#if theSymbol}}  readonly="readonly" {{/if}} required>
     </div>
 
-    {{#if errorSymbol}}
-      <div style="color: #c81921;" class="mt-1">找不到股票代號：{{ errorSymbol }}</div>
-    {{/if}}
+    <div style="color: #c81921;" class="mt-1 err-msg"></div>
 
     <label for="name" class="form-label mt-3">股票名稱：</label>
     {{#if newSymbol}}
@@ -23,7 +21,15 @@
     <script>
       function searchName() {
         const symbol = document.querySelector('#symbol').value
-        document.location.href = `/stocks/search/${symbol}`
+        axios.get(`/api/search/${symbol}`)
+          .then(response => {
+            const data = response.data
+            if (data.message === "symbol didn't exist") {
+              document.querySelector('.err-msg').innerText = `找不到股票代號: ${symbol}`
+              return
+            }
+           document.querySelector('#name').value = data.name
+          }).catch(err => console.warn(err))
       }
     </script>
 

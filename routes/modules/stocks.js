@@ -3,7 +3,6 @@ const router = express.Router()
 const Record = require('../../models/record')
 const Stock = require('../../models/stock')
 const Realized = require('../../models/realized-profit')
-const axios = require('axios').default
 const moment = require('moment')
 const updateStock = require('../../helper/update-stock')
 
@@ -37,23 +36,6 @@ router.post('/new', async (req, res) => {
     await updateStock(symbol)
   }
   res.redirect('/')
-})
-
-// search name by symbol
-router.get('/search/:symbol', (req, res) => {
-  const symbol = req.params.symbol
-  const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
-  axios.get(BASE_URL + `tse_${symbol}.tw|`)
-    .then(function (response) {
-      const data = response.data.msgArray
-      if (data.length === 0) {
-        return res.render('new', { symbol, newSymbol: true, errorSymbol: symbol })
-      }
-      const name = data[0].n
-      res.render('new', { symbol, name, newSymbol: true })
-    }).catch(function (error) {
-      console.log(error)
-    })
 })
 
 // realized profit page
