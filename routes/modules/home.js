@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
         stocks[i].price = Math.floor(price * 100) / 100
       }
     }).catch(function (error) {
-      console.log(error)
+      console.warn(error)
     })
   stocks.forEach(stock => {
     // calculate average cost

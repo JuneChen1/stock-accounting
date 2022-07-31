@@ -13,8 +13,8 @@ router.get('/new', (req, res) => {
 
 router.post('/new', async (req, res) => {
   let { symbol, name, method, value, shares, date } = req.body
-  if (!symbol || !name || !method || !date) {
-    console.log('symbol, name, method, date are required')
+  if (!symbol || !name || !method || !value || !shares || !date) {
+    req.flash('error_msg', '所有欄位皆為必填')
     return res.redirect('back')
   }
   if (method === '賣出') {
@@ -35,6 +35,7 @@ router.post('/new', async (req, res) => {
     // already have stock => update stock
     await updateStock(symbol)
   }
+  req.flash('success_msg', '新增成功')
   res.redirect('/')
 })
 
@@ -70,8 +71,8 @@ router.get('/:symbol/new', (req, res) => {
 router.post('/:symbol/new', async (req, res) => {
   const symbol = req.params.symbol
   let { name, method, value, shares, date } = req.body
-  if (!symbol || !name || !method || !date) {
-    console.log('symbol, name, method, date are required')
+  if (!symbol || !name || !method || !value || !shares || !date) {
+    req.flash('error_msg', '所有欄位皆為必填')
     return res.redirect('back')
   }
   if (method === '賣出') {
@@ -80,6 +81,7 @@ router.post('/:symbol/new', async (req, res) => {
   }
   await Record.create({ symbol, name, method, value, shares, date })
   await updateStock(symbol)
+  req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
 })
 
@@ -93,9 +95,14 @@ router.get('/:symbol/dividend', (req, res) => {
 
 router.post('/:symbol/dividend/new', async (req, res) => {
   const { symbol, name, value, shares, date } = req.body
+  if (!symbol || !name || !date) {
+    req.flash('error_msg', '代號、名稱、時間為必填!')
+    return res.redirect('back')
+  }
   const method = '股利'
   await Record.create({ symbol, name, method, value, shares, date })
   await updateStock(symbol)
+  req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
 })
 
@@ -124,7 +131,7 @@ router.get('/:symbol', (req, res) => {
       })
       res.render('detail', { records, symbol, name: records[0].name })
     })
-    .catch(err => console.log(err))
+    .catch(err => console.warn(err))
 })
 
 module.exports = router

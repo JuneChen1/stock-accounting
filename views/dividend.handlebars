@@ -1,4 +1,5 @@
 <div class="mx-auto my-5" style="width: 25%;">
+  {{> message}}
   <form action="/stocks/{{ symbol }}/dividend/new" method="POST">
     <label for="symbol" class="form-label">股票代號：</label>
     <div class="input-group">

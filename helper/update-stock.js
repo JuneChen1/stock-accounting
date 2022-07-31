@@ -34,6 +34,7 @@ function updateStock (symbol) {
           Record.deleteMany({ symbol }),
           Realized.create({ symbol, name: stock.name, cost, profit, roi })
         ])
+          .catch(err => console.warn)
       }
       stock.value = value
       stock.shares = shares
