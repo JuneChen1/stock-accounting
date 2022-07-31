@@ -33,7 +33,7 @@ router.post('/new', async (req, res) => {
     }])
   } else {
     // already have stock => update stock
-    await updateStock(symbol)
+    await updateStock(req, res, symbol)
   }
   req.flash('success_msg', '新增成功')
   res.redirect('/')
@@ -80,7 +80,7 @@ router.post('/:symbol/new', async (req, res) => {
     shares = shares * -1
   }
   await Record.create({ symbol, name, method, value, shares, date })
-  await updateStock(symbol)
+  await updateStock(req, res, symbol)
   req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
 })
@@ -101,7 +101,7 @@ router.post('/:symbol/dividend/new', async (req, res) => {
   }
   const method = '股利'
   await Record.create({ symbol, name, method, value, shares, date })
-  await updateStock(symbol)
+  await updateStock(req, res, symbol)
   req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
 })
@@ -112,7 +112,7 @@ router.delete('/:symbol/:id', async (req, res) => {
   const symbol = req.params.symbol
   const record = await Record.findOne({ _id })
   await record.remove()
-  await updateStock(symbol)
+  await updateStock(req, res, symbol)
   res.redirect(`/stocks/${symbol}`)
 })
 

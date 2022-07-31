@@ -2,7 +2,7 @@ const Stock = require('../models/stock')
 const Record = require('../models/record')
 const Realized = require('../models/realized-profit')
 
-function updateStock (symbol) {
+function updateStock (req, res, symbol) {
   return Promise.all([
     Stock.findOne({ symbol }),
     Record.find({ symbol })
@@ -34,6 +34,10 @@ function updateStock (symbol) {
           Record.deleteMany({ symbol }),
           Realized.create({ symbol, name: stock.name, cost, profit, roi })
         ])
+        .then(() => {
+          req.flash('success_msg', '已新增至已實現損益')
+          res.redirect('/')
+        })
           .catch(err => console.warn)
       }
       stock.value = value
