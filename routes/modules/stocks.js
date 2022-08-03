@@ -50,14 +50,17 @@ router.get('/realizedprofit', (req, res) => {
     .then(records => {
       const total = {
         cost: 0,
-        profit: 0
+        profit: 0,
+        roi: '0%'
       }
       records.forEach(record => {
         total.cost += record.cost
         total.profit += record.profit
         record.date = moment(record.date).format('YYYY/MM/DD')
       })
-      total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
+      if (total.cost !== 0) {
+        total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
+      }
       res.render('realizedprofit', { records, total, realized: true })
     })
     .catch(err => console.warn(err))
