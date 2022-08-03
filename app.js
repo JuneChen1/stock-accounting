@@ -6,6 +6,7 @@ const exphbs = create({ defaultLayout: 'main' })
 const methodOverride = require('method-override')
 const session = require('express-session')
 const flash = require('connect-flash')
+const usePassport = require('./config/passport')
 
 const port = 3000
 
@@ -21,6 +22,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+usePassport(app)
 app.use(flash())
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
