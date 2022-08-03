@@ -3,9 +3,11 @@ const router = express.Router()
 const home = require('./modules/home')
 const stocks = require('./modules/stocks')
 const api = require('./modules/api')
+const users = require('./modules/users')
 
 router.use('/stocks', stocks)
 router.use('/api', api)
+router.use('/users', users)
 router.use('/', home)
 
 module.exports = router
