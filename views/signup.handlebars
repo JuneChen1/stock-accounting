@@ -1,23 +1,26 @@
 <form action="/signup" method="POST">
   <div class="d-flex flex-column align-items-center mt-5">
-    {{> message}}
     <h3>建立帳號</h3>
     <div class="mt-2" style="width: 20%;">
+      {{> message}}
       <label for="email" class="form-label">Email</label>
       <div class="input-group mb-3">
-        <input type="email" class="form-control" id="email" aria-describedby="basic-addon3">
+        <input type="email" class="form-control" id="email" name="email"
+        aria-describedby="basic-addon3" value="{{ email }}" required>
       </div>
       <label for="name" class="form-label">名稱</label>
       <div class="input-group mb-3">
-        <input type="name" class="form-control" id="name" aria-describedby="basic-addon3">
+        <input type="name" class="form-control" id="name" name="name"
+        aria-describedby="basic-addon3" value="{{ name }}" required>
       </div>
       <label for="password" class="form-label">密碼</label>
       <div class="input-group mb-3">
-        <input type="password" class="form-control" id="password" aria-describedby="basic-addon3">
+        <input type="password" class="form-control" id="password" name="password"
+        aria-describedby="basic-addon3" value="{{ password }}" required>
       </div>
       <label for="confirm-password" class="form-label">確認密碼</label>
       <div class="input-group mb-3">
-        <input type="confirm-password" class="form-control" id="confirm-password" aria-describedby="basic-addon3">
+        <input type="password" class="form-control" id="confirm-password" name="confirmPassword" aria-describedby="basic-addon3" value="{{ confirmPassword }}" required>
       </div>
     </div>
     <button type="submit" class="btn btn-dark mt-4" style="width: 20%; border-radius: 50px;">
