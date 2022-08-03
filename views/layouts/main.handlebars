@@ -20,9 +20,12 @@
         </li>
       </ul>
       {{#if isAuthenticated}}
-      <form action="/users/logout">
-        <button type="submit" class="btn btn-light">登出</button>
-      </form>
+        <a class="nav-link active me-3" aria-current="page" href="/" style="color: white;">
+          {{ user.name }}
+        </a>
+        <form action="/users/logout">
+          <button type="submit" class="btn btn-light">登出</button>
+        </form>
       {{/if}}
     </div>
   </nav>
