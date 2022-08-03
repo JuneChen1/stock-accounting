@@ -1,6 +1,8 @@
 # 簡易股票記帳
 
 ## 功能說明
++ 使用者可註冊帳號
++ 使用者可使用帳號與密碼登入
 + 可新增、刪除股票買賣紀錄
 + 可新增、刪除股利紀錄
 + 可查看個別股票報酬率
@@ -47,3 +49,6 @@ mongodb connected
 + Method-override 3.0.0
 + Moment 2.29.3
 + Axios 0.27.2
++ Passport 0.4.1
++ Passport-local 1.0.0
++ Bcryptjs 2.4.3
