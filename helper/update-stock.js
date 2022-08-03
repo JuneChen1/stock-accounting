@@ -3,9 +3,10 @@ const Record = require('../models/record')
 const Realized = require('../models/realized-profit')
 
 function updateStock (req, res, symbol) {
+  const userId = req.user._id
   return Promise.all([
-    Stock.findOne({ symbol }),
-    Record.find({ symbol })
+    Stock.findOne({ symbol, userId }),
+    Record.find({ symbol, userId })
   ])
     .then(([stock, records]) => {
       if (!stock) return
@@ -31,8 +32,8 @@ function updateStock (req, res, symbol) {
         const profit = value * -1
         const roi = (Math.round((profit / cost) * 100)).toString() + '%'
         return Promise.all([
-          Record.deleteMany({ symbol }),
-          Realized.create({ symbol, name: stock.name, cost, profit, roi })
+          Record.deleteMany({ symbol, userId }),
+          Realized.create({ symbol, name: stock.name, cost, profit, roi, userId })
         ])
         .then(() => {
           req.flash('success_msg', '已新增至已實現損益')

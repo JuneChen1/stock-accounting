@@ -12,6 +12,7 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
+  const userId = req.user._id
   let { symbol, name, method, value, shares, date } = req.body
   if (!symbol || !name || !method || !value || !shares || !date) {
     req.flash('error_msg', '所有欄位皆為必填')
@@ -21,15 +22,16 @@ router.post('/new', async (req, res) => {
     value = value * -1
     shares = shares * -1
   }
-  await Record.create({ symbol, name, method, value, shares, date })
-  const currentStock = await Stock.findOne({ symbol })
+  await Record.create({ symbol, name, method, value, shares, date, userId })
+  const currentStock = await Stock.findOne({ symbol, userId })
   // no current stock => add stock
   if (!currentStock) {
     await Stock.create([{
       symbol,
       name,
       shares,
-      value
+      value,
+      userId
     }])
   } else {
     // already have stock => update stock
@@ -41,7 +43,8 @@ router.post('/new', async (req, res) => {
 
 // realized profit page
 router.get('/realizedprofit', (req, res) => {
-  Realized.find()
+  const userId = req.user._id
+  Realized.find({ userId })
     .lean()
     .sort({ date: 'desc' })
     .then(records => {
@@ -62,13 +65,15 @@ router.get('/realizedprofit', (req, res) => {
 
 // add record of current stock
 router.get('/:symbol/new', (req, res) => {
+  const userId = req.user._id
   const symbol = req.params.symbol
-  Stock.findOne({ symbol })
+  Stock.findOne({ symbol, userId })
     .then(stock => res.render('new', { symbol, name: stock.name, theSymbol: true }))
     .catch(err => console.warn(err))
 })
 
 router.post('/:symbol/new', async (req, res) => {
+  const userId = req.user._id
   const symbol = req.params.symbol
   let { name, method, value, shares, date } = req.body
   if (!symbol || !name || !method || !value || !shares || !date) {
@@ -79,7 +84,7 @@ router.post('/:symbol/new', async (req, res) => {
     value = value * -1
     shares = shares * -1
   }
-  await Record.create({ symbol, name, method, value, shares, date })
+  await Record.create({ symbol, name, method, value, shares, date, userId })
   await updateStock(req, res, symbol)
   req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
@@ -87,20 +92,22 @@ router.post('/:symbol/new', async (req, res) => {
 
 // add dividend
 router.get('/:symbol/dividend', (req, res) => {
+  const userId = req.user._id
   const symbol = req.params.symbol
-  Stock.findOne({ symbol })
+  Stock.findOne({ symbol, userId })
     .then(stock => res.render('dividend', { symbol, name: stock.name }))
     .catch(err => console.warn(err))
 })
 
 router.post('/:symbol/dividend/new', async (req, res) => {
+  const userId = req.user._id
   const { symbol, name, value, shares, date } = req.body
   if (!symbol || !name || !date) {
     req.flash('error_msg', '代號、名稱、時間為必填!')
     return res.redirect('back')
   }
   const method = '股利'
-  await Record.create({ symbol, name, method, value, shares, date })
+  await Record.create({ symbol, name, method, value, shares, date, userId })
   await updateStock(req, res, symbol)
   req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
@@ -108,9 +115,10 @@ router.post('/:symbol/dividend/new', async (req, res) => {
 
 // delete record
 router.delete('/:symbol/:id', async (req, res) => {
+  const userId = req.user._id
   const _id = req.params.id
   const symbol = req.params.symbol
-  const record = await Record.findOne({ _id })
+  const record = await Record.findOne({ _id, userId })
   await record.remove()
   await updateStock(req, res, symbol)
   res.redirect(`/stocks/${symbol}`)
@@ -118,8 +126,9 @@ router.delete('/:symbol/:id', async (req, res) => {
 
 // records of specific stock
 router.get('/:symbol', (req, res) => {
+  const userId = req.user._id
   const symbol = req.params.symbol
-  Record.find({ symbol })
+  Record.find({ symbol, userId })
     .lean()
     .sort({ date: 'desc' })
     .then(records => {

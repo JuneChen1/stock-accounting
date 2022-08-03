@@ -4,7 +4,8 @@ const Stock = require('../../models/stock')
 const axios = require('axios').default
 
 router.get('/', async (req, res) => {
-  const data = await Stock.find().lean().sort({ symbol: 'asc' })
+  const userId = req.user._id
+  const data = await Stock.find({ userId }).lean().sort({ symbol: 'asc' })
   const stocks = data.filter(stock => stock.shares !== 0)
   const total = {
     marketCap: 0,
