@@ -19,6 +19,11 @@
           <a class="nav-link {{#if realized}} active {{/if}}" href="/stocks/realizedprofit">已實現損益</a>
         </li>
       </ul>
+      {{#if isAuthenticated}}
+      <form action="/users/logout">
+        <button type="submit" class="btn btn-light">登出</button>
+      </form>
+      {{/if}}
     </div>
   </nav>
 
