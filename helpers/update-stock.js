@@ -35,10 +35,10 @@ function updateStock (req, res, symbol) {
           Record.deleteMany({ symbol, userId }),
           Realized.create({ symbol, name: stock.name, cost, profit, roi, userId })
         ])
-        .then(() => {
-          req.flash('success_msg', '已新增至已實現損益')
-          res.redirect('/')
-        })
+          .then(() => {
+            req.flash('success_msg', '已新增至已實現損益')
+            res.redirect('/')
+          })
           .catch(err => console.warn)
       }
       stock.value = value

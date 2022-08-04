@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Stock = require('../../models/stock')
 const axios = require('axios').default
+const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 
 router.get('/', async (req, res) => {
   const userId = req.user._id
@@ -54,7 +55,15 @@ router.get('/', async (req, res) => {
   total.marketCap = Math.round(total.marketCap)
   total.profit = total.marketCap - total.amount
   total.roi = (Math.round(((total.marketCap - total.amount) / total.amount) * 100)).toString() + '%'
-  res.render('index', { stocks, total })
+
+  // pagination
+  const limit = 10
+  const page = Number(req.query.page) || 1
+  const offset = getOffset(limit, page)
+  const currentStocks = stocks.slice(offset, offset + limit)
+  const pagination = getPagination(limit, page, stocks.length)
+
+  res.render('index', { stocks: currentStocks, total, pagination })
 })
 
 module.exports = router

@@ -4,7 +4,7 @@ const Record = require('../../models/record')
 const Stock = require('../../models/stock')
 const Realized = require('../../models/realized-profit')
 const moment = require('moment')
-const updateStock = require('../../helper/update-stock')
+const updateStock = require('../../helpers/update-stock')
 
 // add new record
 router.get('/new', (req, res) => {
