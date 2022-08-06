@@ -34,7 +34,7 @@ npm run start
 ```
 Express is running on http://localhost:3000
 ```
-8. 當終端機出現以下訊息，代表 Mongodb 連線成功
+8. 當終端機出現以下訊息，代表 MongoDB 連線成功
 ```
 mongodb connected
 ```
