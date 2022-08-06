@@ -39,7 +39,7 @@ function updateStock (req, res, symbol) {
             req.flash('success_msg', '已新增至已實現損益')
             res.redirect('/')
           })
-          .catch(err => console.warn)
+          .catch(err => console.warn(err))
       }
       stock.value = value
       stock.shares = shares

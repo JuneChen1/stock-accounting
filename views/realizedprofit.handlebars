@@ -1,43 +1,67 @@
-<div style="margin: 30px auto; padding: 0 8px; max-width: 1000px;">
-  <div class="card bg-light mb-4" style="width: 40%; border-radius: 10px;">
-    <div class="card-body d-flex justify-content-between">
-      <div>
-        <h4>總成本</h4>
-        <h5 class="ps-1">{{ total.cost }}</h5>
-      </div>
-      <div>
-        <h4>總損益</h4>
-        <h5 class="ps-1">{{ total.profit }}</h5>
-      </div>
-      <div>
-        <h4>總報酬率</h4>
-        <h5 class="ps-1">{{ total.roi }}</h5>
+<div style="margin: 30px auto; padding: 0 8px; max-width: 1000px; height: 100%;">
+  <div style="height: 90%;">
+    <div class="card bg-light mb-4" style="width: 40%; border-radius: 10px;">
+      <div class="card-body d-flex justify-content-between">
+        <div>
+          <h4>總成本</h4>
+          <h5 class="ps-1">{{ total.cost }}</h5>
+        </div>
+        <div>
+          <h4>總損益</h4>
+          <h5 class="ps-1">{{ total.profit }}</h5>
+        </div>
+        <div>
+          <h4>總報酬率</h4>
+          <h5 class="ps-1">{{ total.roi }}</h5>
+        </div>
       </div>
     </div>
+
+    <table class="table table-striped" id="record-table">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 11%">代號</th>
+          <th scope="col" style="width: 18%">名稱</th>
+          <th scope="col" style="width: 15%">投資成本</th>
+          <th scope="col" style="width: 15%">實現損益</th>
+          <th scope="col" style="width: 15%">報酬率</th>
+          <th scope="col" style="width: 20%">日期</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each records}}
+        <tr>
+          <th scope="row" class="name">{{ this.symbol }}</th>
+          <td class="name">{{ this.name }}</td>
+          <td class="cost">{{ this.cost }}</td>
+          <td class="profit">{{ this.profit }}</td>
+          <td class="roi">{{ this.roi }}</td>
+          <td class="date">{{ this.date }}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 
-  <table class="table table-striped" id="record-table">
-    <thead>
-      <tr>
-        <th scope="col" style="width: 11%">代號</th>
-        <th scope="col" style="width: 18%">名稱</th>
-        <th scope="col" style="width: 15%">投資成本</th>
-        <th scope="col" style="width: 15%">實現損益</th>
-        <th scope="col" style="width: 15%">報酬率</th>
-        <th scope="col" style="width: 20%">日期</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each records}}
-      <tr>
-        <th scope="row" class="name">{{ this.symbol }}</th>
-        <td class="name">{{ this.name }}</td>
-        <td class="cost">{{ this.cost }}</td>
-        <td class="profit">{{ this.profit }}</td>
-        <td class="roi">{{ this.roi }}</td>
-        <td class="date">{{ this.date }}</td>
-      </tr>
+  <nav class="mt-3">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="page-link" href="/stocks/realizedprofit?page={{pagination.prev}}" style="color: #595959;">&laquo;</a>
+      </li>
+      {{#each pagination.pages}}
+      {{#ifCond this ../pagination.currentPage}}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" style="color: #595959;">{{this}}</a>
+      </li>
+      {{else}}
+      <li class="page-item">
+        <a class="page-link" href="/stocks/realizedprofit/?page={{this}}" style="color: #595959;">{{this}}</a>
+      </li>
+      {{/ifCond}}
       {{/each}}
-    </tbody>
-  </table>
+      <li class="page-item">
+        <a class="page-link" href="/stocks/realizedprofit/?page={{pagination.next}}" style="color: #595959;">&raquo;</a>
+      </li>
+    </ul>
+  </nav>
 </div>
