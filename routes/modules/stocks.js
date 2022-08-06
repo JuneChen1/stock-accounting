@@ -62,6 +62,7 @@ router.get('/realizedprofit', (req, res) => {
       if (total.cost !== 0) {
         total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
       }
+      res.locals.realized = true
 
       const limit = 11
       const page = Number(req.query.page) || 1
@@ -69,7 +70,7 @@ router.get('/realizedprofit', (req, res) => {
       const currentRecords = records.slice(offset, offset + limit)
       const pagination = getPagination(limit, page, records.length)
 
-      res.render('realizedprofit', { records: currentRecords, total, realized: true, pagination })
+      res.render('realizedprofit', { records: currentRecords, total, pagination })
     })
     .catch(err => console.warn(err))
 })
@@ -155,8 +156,10 @@ router.get('/:symbol', (req, res) => {
       const offset = getOffset(limit, page)
       const currentRecords = records.slice(offset, offset + limit)
       const pagination = getPagination(limit, page, records.length)
+      res.locals.name = records[0].name
+      res.locals.symbol = symbol
 
-      res.render('detail', { records: currentRecords, symbol, name: records[0].name, pagination })
+      res.render('detail', { records: currentRecords, pagination })
     })
     .catch(err => console.warn(err))
 })
