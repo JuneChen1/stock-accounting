@@ -5,6 +5,7 @@ const Stock = require('../../models/stock')
 const Realized = require('../../models/realized-profit')
 const moment = require('moment')
 const updateStock = require('../../helpers/update-stock')
+const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 
 // add new record
 router.get('/new', (req, res) => {
@@ -141,7 +142,14 @@ router.get('/:symbol', (req, res) => {
       records.forEach(record => {
         record.date = moment(record.date).format('YYYY/MM/DD')
       })
-      res.render('detail', { records, symbol, name: records[0].name })
+
+      const limit = 10
+      const page = Number(req.query.page) || 1
+      const offset = getOffset(limit, page)
+      const currentRecords = records.slice(offset, offset + limit)
+      const pagination = getPagination(limit, page, records.length)
+
+      res.render('detail', { records: currentRecords, symbol, name: records[0].name, pagination })
     })
     .catch(err => console.warn(err))
 })

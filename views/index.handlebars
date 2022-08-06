@@ -63,9 +63,15 @@
         <a class="page-link" href="/?page={{pagination.prev}}" style="color: #595959;">&laquo;</a>
       </li>
       {{#each pagination.pages}}
-        <li class="page-item">
-          <a class="page-link" href="/?page={{this}}" style="color: #595959;">{{this}}</a>
-        </li>
+        {{#ifCond this ../pagination.currentPage}}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" style="color: #595959;">{{this}}</a>
+          </li>
+        {{else}}
+          <li class="page-item">
+            <a class="page-link" href="/?page={{this}}" style="color: #595959;">{{this}}</a>
+          </li>
+        {{/ifCond}}
       {{/each}}
       <li class="page-item">
         <a class="page-link" href="/?page={{pagination.next}}" style="color: #595959;">&raquo;</a>
