@@ -22,7 +22,7 @@ cd stock-accounting
 ```
 npm install
 ```
-5. 將 .env.example 檔名更改為 .env，並新增以下變數
+5. 將 .env.example 檔名更改為 .env，並新增 MongoDB 連線 URI
 ```
 MONGODB_URI=
 ```
