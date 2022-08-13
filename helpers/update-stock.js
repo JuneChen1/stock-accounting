@@ -2,7 +2,7 @@ const Stock = require('../models/stock')
 const Record = require('../models/record')
 const Realized = require('../models/realized-profit')
 
-function updateStock (req, res, symbol) {
+function updateStock (req, symbol) {
   const userId = req.user._id
   return Promise.all([
     Stock.findOne({ symbol, userId }),

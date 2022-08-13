@@ -26,6 +26,7 @@ router.post('/new', async (req, res) => {
   await Record.create({ symbol, name, method, value, shares, date, userId })
   const currentStock = await Stock.findOne({ symbol, userId })
   // no current stock => add stock
+  let update = ''
   if (!currentStock) {
     await Stock.create([{
       symbol,
@@ -36,7 +37,12 @@ router.post('/new', async (req, res) => {
     }])
   } else {
     // already have stock => update stock
-    await updateStock(req, res, symbol)
+    update = await updateStock(req, symbol)
+  }
+  if (update === 'realized') {
+    req.flash('success_msg', '已新增至已實現損益')
+    res.redirect('/')
+    return
   }
   req.flash('success_msg', '新增成功')
   res.redirect('/')
@@ -97,7 +103,7 @@ router.post('/:symbol/new', async (req, res) => {
     shares = shares * -1
   }
   await Record.create({ symbol, name, method, value, shares, date, userId })
-  const update = await updateStock(req, res, symbol)
+  const update = await updateStock(req, symbol)
   if (update === 'realized') {
     req.flash('success_msg', '已新增至已實現損益')
     res.redirect('/')
@@ -123,9 +129,13 @@ router.post('/:symbol/dividend/new', async (req, res) => {
     req.flash('error_msg', '代號、名稱、時間為必填!')
     return res.redirect('back')
   }
+  if (value < 0 || shares < 0) {
+    req.flash('error_msg', '配發現金、配發股數不可為負數!')
+    return res.redirect('back')
+  }
   const method = '股利'
   await Record.create({ symbol, name, method, value, shares, date, userId })
-  await updateStock(req, res, symbol)
+  await updateStock(req, symbol)
   req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
 })
@@ -137,7 +147,11 @@ router.delete('/:symbol/:id', async (req, res) => {
   const symbol = req.params.symbol
   const record = await Record.findOne({ _id, userId })
   await record.remove()
-  await updateStock(req, res, symbol)
+  const update = await updateStock(req, symbol)
+  if (update === 'realized') {
+    res.redirect('/')
+    return
+  }
   res.redirect(`/stocks/${symbol}`)
 })
 

@@ -19,21 +19,6 @@
       name="name" value="{{ name }}" readonly="readonly" required>
     </div>
 
-    <script>
-      function searchName() {
-        const symbol = document.querySelector('#symbol').value
-        axios.get(`/api/search/${symbol}`)
-          .then(response => {
-            const data = response.data
-            if (data.message === "symbol didn't exist") {
-              document.querySelector('.err-msg').innerText = `找不到股票代號: ${symbol}`
-              return
-            }
-           document.querySelector('#name').value = data.name
-          }).catch(err => console.warn(err))
-      }
-    </script>
-
     <div class="input-group mb-3">
       <label for="method" class="form-label">買入/賣出：</label>
       <select class="form-select" id="method" style="width: 100%;" name="method">
@@ -44,12 +29,12 @@
 
     <label for="value" class="form-label">總額：</label>
     <div class="input-group mb-3">
-      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" name="value" required>
+      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" min="0" name="value" required>
     </div>
 
     <label for="shares" class="form-label">股數：</label>
     <div class="input-group mb-3">
-      <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3" name="shares" required>
+      <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3" min="0" name="shares" required>
     </div>
 
     <label for="date" class="form-label">時間：</label>
@@ -58,5 +43,20 @@
     </div>
 
     <button type="submit" class="btn btn-dark mt-3">儲存</button>
+
+    <script>
+      function searchName() {
+        const symbol = document.querySelector('#symbol').value
+        axios.get(`/api/search/${symbol}`)
+          .then(response => {
+            const data = response.data
+            if (data.message === "symbol didn't exist") {
+              document.querySelector('.err-msg').innerText = `找不到股票代號: ${symbol}`
+              return
+            }
+            document.querySelector('#name').value = data.name
+          }).catch(err => console.warn(err))
+      }
+    </script>
   </form>
 </div>
