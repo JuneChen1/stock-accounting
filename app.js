@@ -10,7 +10,7 @@ const flash = require('connect-flash')
 const usePassport = require('./config/passport')
 
 const port = process.env.PORT || 3000
-const SESSION_SECRET = process.env.PORT || 'ThisIsMySecret'
+const SESSION_SECRET = process.env.SESSION_SECRET || 'ThisIsMySecret'
 
 require('./config/mongoose')
 
