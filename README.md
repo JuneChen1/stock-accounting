@@ -25,6 +25,7 @@ npm install
 5. 將 .env.example 檔名更改為 .env，並新增 MongoDB 連線 URI
 ```
 MONGODB_URI=
+SESSION_SECRET='ThisIsMySecret'
 ```
 6. 啟動伺服器
 ```
