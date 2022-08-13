@@ -54,6 +54,7 @@
             const data = response.data
             if (data.message === "symbol didn't exist") {
               document.querySelector('.err-msg').innerText = `找不到股票代號: ${symbol}`
+              document.querySelector('#name').value = ''
               return
             }
             document.querySelector('#name').value = data.name
