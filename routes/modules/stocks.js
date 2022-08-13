@@ -13,39 +13,43 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
-  const userId = req.user._id
-  let { symbol, name, method, value, shares, date } = req.body
-  if (!symbol || !name || !method || !value || !shares || !date) {
-    req.flash('error_msg', '所有欄位皆為必填')
-    return res.redirect('back')
-  }
-  if (method === '賣出') {
-    value = value * -1
-    shares = shares * -1
-  }
-  await Record.create({ symbol, name, method, value, shares, date, userId })
-  const currentStock = await Stock.findOne({ symbol, userId })
-  // no current stock => add stock
-  let update = ''
-  if (!currentStock) {
-    await Stock.create([{
-      symbol,
-      name,
-      shares,
-      value,
-      userId
-    }])
-  } else {
-    // already have stock => update stock
-    update = await updateStock(req, symbol)
-  }
-  if (update === 'realized') {
-    req.flash('success_msg', '已新增至已實現損益')
+  try {
+    const userId = req.user._id
+    let { symbol, name, method, value, shares, date } = req.body
+    if (!symbol || !name || !method || !value || !shares || !date) {
+      req.flash('error_msg', '所有欄位皆為必填')
+      return res.redirect('back')
+    }
+    if (method === '賣出') {
+      value = value * -1
+      shares = shares * -1
+    }
+    await Record.create({ symbol, name, method, value, shares, date, userId })
+    const currentStock = await Stock.findOne({ symbol, userId })
+    // no current stock => add stock
+    let update = ''
+    if (!currentStock) {
+      await Stock.create([{
+        symbol,
+        name,
+        shares,
+        value,
+        userId
+      }])
+    } else {
+      // already have stock => update stock
+      update = await updateStock(req, symbol)
+    }
+    if (update === 'realized') {
+      req.flash('success_msg', '已新增至已實現損益')
+      res.redirect('/')
+      return
+    }
+    req.flash('success_msg', '新增成功')
     res.redirect('/')
-    return
+  } catch (err) {
+    console.warn(err)
   }
-  req.flash('success_msg', '新增成功')
-  res.redirect('/')
 })
 
 // realized profit page
@@ -91,26 +95,30 @@ router.get('/:symbol/new', (req, res) => {
 })
 
 router.post('/:symbol/new', async (req, res) => {
-  const userId = req.user._id
-  const symbol = req.params.symbol
-  let { name, method, value, shares, date } = req.body
-  if (!symbol || !name || !method || !value || !shares || !date) {
-    req.flash('error_msg', '所有欄位皆為必填')
-    return res.redirect('back')
+  try {
+    const userId = req.user._id
+    const symbol = req.params.symbol
+    let { name, method, value, shares, date } = req.body
+    if (!symbol || !name || !method || !value || !shares || !date) {
+      req.flash('error_msg', '所有欄位皆為必填')
+      return res.redirect('back')
+    }
+    if (method === '賣出') {
+      value = value * -1
+      shares = shares * -1
+    }
+    await Record.create({ symbol, name, method, value, shares, date, userId })
+    const update = await updateStock(req, symbol)
+    if (update === 'realized') {
+      req.flash('success_msg', '已新增至已實現損益')
+      res.redirect('/')
+      return
+    }
+    req.flash('success_msg', '新增成功')
+    res.redirect(`/stocks/${symbol}`)
+  } catch (err) {
+    console.warn(err)
   }
-  if (method === '賣出') {
-    value = value * -1
-    shares = shares * -1
-  }
-  await Record.create({ symbol, name, method, value, shares, date, userId })
-  const update = await updateStock(req, symbol)
-  if (update === 'realized') {
-    req.flash('success_msg', '已新增至已實現損益')
-    res.redirect('/')
-    return
-  }
-  req.flash('success_msg', '新增成功')
-  res.redirect(`/stocks/${symbol}`)
 })
 
 // add dividend
@@ -123,36 +131,59 @@ router.get('/:symbol/dividend', (req, res) => {
 })
 
 router.post('/:symbol/dividend/new', async (req, res) => {
-  const userId = req.user._id
-  const { symbol, name, value, shares, date } = req.body
-  if (!symbol || !name || !date) {
-    req.flash('error_msg', '代號、名稱、時間為必填!')
-    return res.redirect('back')
+  try {
+    const userId = req.user._id
+    const { symbol, name, value, shares, date } = req.body
+    if (!symbol || !name || !date) {
+      req.flash('error_msg', '代號、名稱、時間為必填!')
+      return res.redirect('back')
+    }
+    if (value < 0 || shares < 0) {
+      req.flash('error_msg', '配發現金、配發股數不可為負數!')
+      return res.redirect('back')
+    }
+    const method = '股利'
+    await Record.create({ symbol, name, method, value, shares, date, userId })
+    await updateStock(req, symbol)
+    req.flash('success_msg', '新增成功')
+    res.redirect(`/stocks/${symbol}`)
+  } catch (err) {
+    console.warn(err)
   }
-  if (value < 0 || shares < 0) {
-    req.flash('error_msg', '配發現金、配發股數不可為負數!')
-    return res.redirect('back')
-  }
-  const method = '股利'
-  await Record.create({ symbol, name, method, value, shares, date, userId })
-  await updateStock(req, symbol)
-  req.flash('success_msg', '新增成功')
-  res.redirect(`/stocks/${symbol}`)
 })
 
 // delete record
-router.delete('/:symbol/:id', async (req, res) => {
-  const userId = req.user._id
-  const _id = req.params.id
-  const symbol = req.params.symbol
-  const record = await Record.findOne({ _id, userId })
-  await record.remove()
-  const update = await updateStock(req, symbol)
-  if (update === 'realized') {
-    res.redirect('/')
-    return
+router.delete('/realizedprofit/:id', async (req, res) => {
+  try {
+    const userId = req.user._id
+    const _id = req.params.id
+    const record = await Realized.findOne({ _id, userId })
+    await record.remove()
+  } catch (err) {
+    console.warn(err)
   }
-  res.redirect(`/stocks/${symbol}`)
+  req.flash('success_msg', '刪除成功')
+  res.redirect('/stocks/realizedprofit')
+})
+
+router.delete('/:symbol/:id', async (req, res) => {
+  try {
+    const userId = req.user._id
+    const _id = req.params.id
+    const symbol = req.params.symbol
+    const record = await Record.findOne({ _id, userId })
+    await record.remove()
+    const update = await updateStock(req, symbol)
+    if (update === 'realized') {
+      req.flash('success_msg', '刪除成功')
+      res.redirect('/')
+      return
+    }
+    req.flash('success_msg', '刪除成功')
+    res.redirect(`/stocks/${symbol}`)
+  } catch (err) {
+    console.warn(err)
+  }
 })
 
 // records of specific stock
