@@ -3,6 +3,7 @@ const router = express.Router()
 const Stock = require('../../models/stock')
 const axios = require('axios').default
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
+const paginationLimit = require('../../config/pagination-limit')
 
 router.get('/', async (req, res) => {
   try {
@@ -58,7 +59,7 @@ router.get('/', async (req, res) => {
     total.roi = (Math.round(((total.marketCap - total.amount) / total.amount) * 100)).toString() + '%'
 
     // pagination
-    const limit = 10
+    const limit = paginationLimit.homePage
     const page = Number(req.query.page) || 1
     const offset = getOffset(limit, page)
     const currentStocks = stocks.slice(offset, offset + limit)

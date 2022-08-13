@@ -6,6 +6,7 @@ const Realized = require('../../models/realized-profit')
 const moment = require('moment')
 const updateStock = require('../../helpers/update-stock')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
+const paginationLimit = require('../../config/pagination-limit')
 
 // add new record
 router.get('/new', (req, res) => {
@@ -74,7 +75,7 @@ router.get('/realizedprofit', (req, res) => {
       }
       res.locals.realized = true
 
-      const limit = 11
+      const limit = paginationLimit.realizedProfitPage
       const page = Number(req.query.page) || 1
       const offset = getOffset(limit, page)
       const currentRecords = records.slice(offset, offset + limit)
@@ -201,7 +202,7 @@ router.get('/:symbol', (req, res) => {
         record.date = moment(record.date).format('YYYY/MM/DD')
       })
 
-      const limit = 11
+      const limit = paginationLimit.detailPage
       const page = Number(req.query.page) || 1
       const offset = getOffset(limit, page)
       const currentRecords = records.slice(offset, offset + limit)
