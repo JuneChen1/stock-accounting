@@ -9,7 +9,7 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const usePassport = require('./config/passport')
 
-const port = 3000
+const port = process.env.PORT || 3000
 
 require('./config/mongoose')
 
