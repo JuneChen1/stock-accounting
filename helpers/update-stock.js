@@ -36,8 +36,7 @@ function updateStock (req, res, symbol) {
           Realized.create({ symbol, name: stock.name, cost, profit, roi, userId })
         ])
           .then(() => {
-            req.flash('success_msg', '已新增至已實現損益')
-            res.redirect('/')
+            return 'realized'
           })
           .catch(err => console.warn(err))
       }

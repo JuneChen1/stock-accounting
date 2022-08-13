@@ -97,7 +97,12 @@ router.post('/:symbol/new', async (req, res) => {
     shares = shares * -1
   }
   await Record.create({ symbol, name, method, value, shares, date, userId })
-  await updateStock(req, res, symbol)
+  const update = await updateStock(req, res, symbol)
+  if (update === 'realized') {
+    req.flash('success_msg', '已新增至已實現損益')
+    res.redirect('/')
+    return
+  }
   req.flash('success_msg', '新增成功')
   res.redirect(`/stocks/${symbol}`)
 })
