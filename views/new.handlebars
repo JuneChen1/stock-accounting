@@ -4,7 +4,8 @@
     <label for="symbol" class="form-label">股票代號：</label>
     <div class="input-group">
       <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" 
-      name="symbol" value="{{ symbol }}" {{#if theSymbol}}  readonly="readonly" {{/if}} required>
+      name="symbol" value="{{ symbol }}" {{#if theSymbol}} readonly="readonly" {{/if}}
+      onblur="searchName()" required>
     </div>
 
     <div style="color: #c81921;" class="mt-1 err-msg"></div>
@@ -55,6 +56,7 @@
               return
             }
             document.querySelector('#name').value = data.name
+            document.querySelector('.err-msg').innerText = ''
           }).catch(err => console.warn(err))
       }
     </script>
