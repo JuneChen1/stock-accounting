@@ -47,6 +47,7 @@
 
     <script>
       function searchName() {
+        document.querySelector('#name').value = '搜尋中...'
         const symbol = document.querySelector('#symbol').value
         axios.get(`/api/search/${symbol}`)
           .then(response => {
