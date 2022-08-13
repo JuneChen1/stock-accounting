@@ -22,9 +22,10 @@ cd stock-accounting
 ```
 npm install
 ```
-5. 將 .env.example 檔名更改為 .env，並新增以下變數
+5. 將 .env.example 檔名更改為 .env，並新增 MongoDB 連線 URI
 ```
 MONGODB_URI=
+SESSION_SECRET='ThisIsMySecret'
 ```
 6. 啟動伺服器
 ```
@@ -34,7 +35,7 @@ npm run start
 ```
 Express is running on http://localhost:3000
 ```
-8. 當終端機出現以下訊息，代表 Mongodb 連線成功
+8. 當終端機出現以下訊息，代表 MongoDB 連線成功
 ```
 mongodb connected
 ```
