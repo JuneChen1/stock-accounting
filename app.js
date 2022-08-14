@@ -17,6 +17,7 @@ require('./config/dividend-schedule')
 
 app.engine('handlebars', exphbs.engine)
 app.set('view engine', 'handlebars')
+app.use(express.static('public'))
 
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: true }))
