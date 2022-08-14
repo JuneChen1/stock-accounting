@@ -13,6 +13,7 @@ const port = process.env.PORT || 3000
 const SESSION_SECRET = process.env.SESSION_SECRET || 'ThisIsMySecret'
 
 require('./config/mongoose')
+require('./config/dividend-schedule')
 
 app.engine('handlebars', exphbs.engine)
 app.set('view engine', 'handlebars')
