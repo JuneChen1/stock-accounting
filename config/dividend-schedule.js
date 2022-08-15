@@ -5,6 +5,7 @@ const Record = require('../models/record')
 
 const rule = new schedule.RecurrenceRule()
 rule.hour = 9
+rule.minute = 0
 rule.tz = 'Etc/GMT-8'
 
 const job = schedule.scheduleJob(rule, function () {
