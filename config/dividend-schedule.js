@@ -4,7 +4,8 @@ const Stock = require('../models/stock')
 const Record = require('../models/record')
 
 const rule = new schedule.RecurrenceRule()
-rule.hour = 3
+rule.hour = 9
+rule.tz = 'Etc/GMT-8'
 
 const job = schedule.scheduleJob(rule, function () {
   dividendSchedule()
