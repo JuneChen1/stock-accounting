@@ -62,6 +62,10 @@ html, body {
   padding: 0 0.5rem;
 }
 
+.fa-trash-can {
+  color: #3B3B3B;
+}
+
 @media screen and (min-width: 486px) {
   #login .form-items, #signup .form-items {
     width: 327px;
