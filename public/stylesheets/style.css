@@ -26,6 +26,24 @@ html, body {
   padding: 0 0.5rem;
 }
 
+#realized-profit {
+  min-height: 650px;
+  max-width: 900px;
+  min-width: 468px;
+  margin: 2rem auto 0 auto;
+  padding: 0 1rem;
+}
+
+#realized-profit .content {
+  min-height: 600px;
+}
+
+#realized-profit .content .card {
+  width: 40%;
+  min-width: 20rem;
+  padding: 0 0.5rem;
+}
+
 @media screen and (min-width: 486px) {
   #login .form-items, #signup .form-items {
     width: 327px;
