@@ -50,7 +50,7 @@ const stockController = {
         stock.profit = profit !== 'NaN' ? profit : ''
         // calculate ROI
         let roi = '-'
-        if (cost > 0) {
+        if (cost > 0 && stock.shares > 0) {
           roi = (Math.round(((stock.price - cost) / cost) * 100)).toString() + '%'
         }
         stock.roi = roi !== 'NaN%' ? roi : ''
