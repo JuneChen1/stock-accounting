@@ -49,7 +49,10 @@ const stockController = {
         const profit = (Math.round((stock.price * stock.shares - stock.value) * 10) / 10).toString()
         stock.profit = profit !== 'NaN' ? profit : ''
         // calculate ROI
-        const roi = (Math.round(((stock.price - cost) / cost) * 100)).toString() + '%'
+        let roi = '-'
+        if (cost > 0) {
+          roi = (Math.round(((stock.price - cost) / cost) * 100)).toString() + '%'
+        }
         stock.roi = roi !== 'NaN%' ? roi : ''
         // calculate total marketCap & amount
         if (stock.price.toString() !== 'NaN') {
@@ -59,7 +62,11 @@ const stockController = {
       })
       total.marketCap = Math.round(total.marketCap)
       total.profit = total.marketCap - total.amount
-      total.roi = (Math.round(((total.marketCap - total.amount) / total.amount) * 100)).toString() + '%'
+      let roi = '-'
+      if (total.amount > 0) {
+        roi = (Math.round(((total.marketCap - total.amount) / total.amount) * 100)).toString() + '%'
+      }
+      total.roi = roi
 
       // pagination
       const limit = paginationLimit.homePage
@@ -102,7 +109,7 @@ const stockController = {
         }])
       } else {
         // already have stock => update stock
-        update = await updateStock(req, symbol)
+        update = await updateStock(userId, symbol)
       }
       if (update === 'realized') {
         req.flash('success_msg', '已新增至已實現損益')
@@ -162,7 +169,7 @@ const stockController = {
         shares = shares * -1
       }
       await Record.create({ symbol, name, method, value, shares, date, userId })
-      const update = await updateStock(req, symbol)
+      const update = await updateStock(userId, symbol)
       if (update === 'realized') {
         req.flash('success_msg', '已新增至已實現損益')
         res.redirect('/')
@@ -195,7 +202,7 @@ const stockController = {
       }
       const method = '股利'
       await Record.create({ symbol, name, method, value, shares, date, userId })
-      await updateStock(req, symbol)
+      await updateStock(userId, symbol)
       req.flash('success_msg', '新增成功')
       res.redirect(`/stocks/${symbol}`)
     } catch (err) {
@@ -209,7 +216,7 @@ const stockController = {
       const symbol = req.params.symbol
       const record = await Record.findOne({ _id, userId })
       await record.remove()
-      const update = await updateStock(req, symbol)
+      const update = await updateStock(userId, symbol)
       if (update === 'realized') {
         req.flash('success_msg', '刪除成功')
         res.redirect('/')
@@ -238,7 +245,7 @@ const stockController = {
           record.date = moment(record.date).format('YYYY/MM/DD')
         })
         if (total.cost !== 0) {
-          total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
+          total.roi = (Math.round(((total.profit - total.cost) / total.cost) * 100)).toString() + '%'
         }
         res.locals.realized = true
 

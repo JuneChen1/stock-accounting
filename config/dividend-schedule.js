@@ -2,10 +2,11 @@ const schedule = require('node-schedule')
 const getTodayDividend = require('../helpers/today-dividend-helper')
 const Stock = require('../models/stock')
 const Record = require('../models/record')
+const updateStock = require('../helpers/update-stock')
 
 const rule = new schedule.RecurrenceRule()
-rule.hour = 9
-rule.minute = 0
+rule.hour = 8
+rule.minute = 59
 rule.tz = 'Etc/GMT-8'
 
 const job = schedule.scheduleJob(rule, function () {
@@ -31,15 +32,18 @@ async function dividendSchedule () {
     })
 
     for (let i = 0; i < dividendStocks.length; i++) {
+      const symbol = dividendStocks[i].symbol
+      const userId = dividendStocks[i].userId
       await Record.create({
-        symbol: dividendStocks[i].symbol,
+        symbol,
         name: dividendStocks[i].name,
         method: '股利',
         value: dividendStocks[i].shares * dividendStocks[i].cashDividend,
         shares: dividendStocks[i].shares * dividendStocks[i].stockDividendRatio,
         date: Date.now(),
-        userId: dividendStocks[i].userId
+        userId
       })
+      await updateStock(userId, symbol)
     }
   } catch (err) {
     console.warn(err)

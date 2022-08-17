@@ -2,8 +2,7 @@ const Stock = require('../models/stock')
 const Record = require('../models/record')
 const Realized = require('../models/realized-profit')
 
-function updateStock (req, symbol) {
-  const userId = req.user._id
+function updateStock (userId, symbol) {
   return Promise.all([
     Stock.findOne({ symbol, userId }),
     Record.find({ symbol, userId })
@@ -13,8 +12,9 @@ function updateStock (req, symbol) {
       let value = 0
       let shares = 0
       records.forEach(record => {
-        if (record.method === '現金股利') {
+        if (record.method === '股利') {
           value -= record.value
+          shares += record.shares
           return
         }
         value += record.value
@@ -25,12 +25,12 @@ function updateStock (req, symbol) {
         stock.remove()
         let cost = 0
         records.forEach(record => {
-          if (record.value > 0) {
+          if (record.value > 0 && record.method !== '股利') {
             cost += record.value
           }
         })
         const profit = value * -1
-        const roi = (Math.round((profit / cost) * 100)).toString() + '%'
+        const roi = (Math.round(((profit - cost) / cost) * 100)).toString() + '%'
         return Promise.all([
           Record.deleteMany({ symbol, userId }),
           Realized.create({ symbol, name: stock.name, cost, profit, roi, userId })
