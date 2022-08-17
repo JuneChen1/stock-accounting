@@ -95,6 +95,7 @@ const stockController = {
         value = value * -1
         shares = shares * -1
       }
+      symbol = symbol.trim()
       await Record.create({ symbol, name, method, value, shares, date, userId })
       const currentStock = await Stock.findOne({ symbol, userId })
       // no current stock => add stock

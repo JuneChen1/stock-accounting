@@ -1,0 +1,45 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+#login .form-items, #signup .form-items {
+  width: 65%;
+}
+
+#index-region {
+  min-height: 720px;
+  max-width: 1000px;
+  min-width: 460px;
+  margin: 2rem auto 0 auto;
+  padding: 0 0.67rem;
+}
+
+#index-region .card {
+  width: 95%;
+  min-width: 24rem;
+}
+
+@media screen and (min-width: 486px) {
+  #login .form-items, #signup .form-items {
+    width: 327px;
+  }
+  #index-region .card {
+    width: 400px;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  #index-region {
+    padding: 0 1rem;
+  }
+  #index-region .card {
+    width: 55%;
+  }
+}
+
+@media screen and (min-width: 991px) {
+  .navbar ul {
+    margin-bottom: 0.5rem;
+  }
+}
