@@ -3,8 +3,18 @@ html, body {
   padding: 0;
 }
 
+#login, #signup {
+  min-width: 300px;
+}
+
 #login .form-items, #signup .form-items {
   width: 65%;
+}
+
+#new-region, #new-dividend-region {
+  width: 65%;
+  min-width: 280px;
+  margin: 0 auto;
 }
 
 #index-region {
@@ -50,6 +60,10 @@ html, body {
   }
   #index-region .card {
     width: 400px;
+  }
+  #new-region, #new-dividend-region {
+    width: 65%;
+    max-width: 330px;
   }
 }
 
