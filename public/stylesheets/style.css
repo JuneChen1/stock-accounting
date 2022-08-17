@@ -15,6 +15,10 @@ html, body {
   padding: 0 0.67rem;
 }
 
+#index-region .content {
+  min-height: 700px;
+}
+
 #index-region .card {
   width: 95%;
   min-width: 24rem;
