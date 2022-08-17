@@ -8,7 +8,7 @@ function updateStock (userId, symbol, del) {
     Record.find({ symbol, userId })
   ])
     .then(([stock, records]) => {
-      if (!stock) return
+      if (!stock) return 'no stock'
       let value = 0
       let shares = 0
       records.forEach(record => {
@@ -30,7 +30,7 @@ function updateStock (userId, symbol, del) {
           }
         })
         const profit = value * -1
-        const roi = (Math.round(((profit - cost) / cost) * 100)).toString() + '%'
+        const roi = (Math.round((profit / cost) * 100)).toString() + '%'
         return Promise.all([
           Record.deleteMany({ symbol, userId }),
           Realized.create({ symbol, name: stock.name, cost, profit, roi, userId })

@@ -97,10 +97,8 @@ const stockController = {
       }
       symbol = symbol.trim()
       await Record.create({ symbol, name, method, value, shares, date, userId })
-      const currentStock = await Stock.findOne({ symbol, userId })
-      // no current stock => add stock
-      let update = ''
-      if (!currentStock) {
+      const update = await updateStock(userId, symbol)
+      if (update === 'no stock') {
         await Stock.create([{
           symbol,
           name,
@@ -108,9 +106,6 @@ const stockController = {
           value,
           userId
         }])
-      } else {
-        // already have stock => update stock
-        update = await updateStock(userId, symbol)
       }
       if (update === 'realized') {
         req.flash('success_msg', '已新增至已實現損益')
@@ -245,7 +240,7 @@ const stockController = {
           record.date = moment(record.date).format('YYYY/MM/DD')
         })
         if (total.cost !== 0) {
-          total.roi = (Math.round(((total.profit - total.cost) / total.cost) * 100)).toString() + '%'
+          total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
         }
         res.locals.realized = true
 
