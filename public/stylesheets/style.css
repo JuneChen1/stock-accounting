@@ -8,20 +8,22 @@ html, body {
 }
 
 #index-region {
-  min-height: 720px;
+  min-height: 650px;
   max-width: 1000px;
-  min-width: 460px;
+  min-width: 468px;
   margin: 2rem auto 0 auto;
-  padding: 0 0.67rem;
+  padding: 0 1rem;
 }
 
 #index-region .content {
-  min-height: 700px;
+  min-height: 550px;
 }
 
 #index-region .card {
   width: 95%;
-  min-width: 24rem;
+  max-width: 30rem;
+  min-width: 26rem;
+  padding: 0 0.5rem;
 }
 
 @media screen and (min-width: 486px) {
