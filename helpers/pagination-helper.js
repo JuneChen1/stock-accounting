@@ -3,7 +3,10 @@ const getOffset = (limit, page) => {
 }
 
 const getPagination = (limit, page, total) => {
-  const totalPage = Math.ceil(total / limit)
+  let totalPage = Math.ceil(total / limit)
+  if (total <= 0) {
+    totalPage = 1
+  }
   const currentPage = page < 1 ? 1 : page > totalPage ? totalPage : page
   const pages = Array.from({ length: totalPage }, (_, index) => index + 1)
   const prev = currentPage - 1 < 1 ? 1 : currentPage - 1

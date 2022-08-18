@@ -19,8 +19,16 @@ const stockController = {
         profit: 0,
         roi: '0%'
       }
+      
+      // pagination
+      const limit = paginationLimit.homePage
+      const page = Number(req.query.page) || 1
+      const offset = getOffset(limit, page)
+      const currentStocks = stocks.slice(offset, offset + limit)
+      const pagination = getPagination(limit, page, stocks.length)
+
       if (stocks.length === 0) {
-        return res.render('index', { total })
+        return res.render('index', { total, pagination })
       }
       // get market price
       let symbolString = ''
@@ -67,13 +75,6 @@ const stockController = {
         roi = (Math.round(((total.marketCap - total.amount) / total.amount) * 100)).toString() + '%'
       }
       total.roi = roi
-
-      // pagination
-      const limit = paginationLimit.homePage
-      const page = Number(req.query.page) || 1
-      const offset = getOffset(limit, page)
-      const currentStocks = stocks.slice(offset, offset + limit)
-      const pagination = getPagination(limit, page, stocks.length)
 
       res.render('index', { stocks: currentStocks, total, pagination })
     } catch (err) {
