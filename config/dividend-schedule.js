@@ -24,14 +24,16 @@ async function dividendSchedule () {
     const dividendStocks = []
     stocks.forEach(s => {
       const data = todayDividend.find(d => d.Code === s.symbol)
-      if (data) {
-        s.cashDividend = Number(data.CashDividend) || 0
-        s.stockDividendRatio = Number(data.StockDividendRatio) || 0
+      if (!data) return
+      s.cashDividend = Number(data.CashDividend) || 0
+      s.stockDividendRatio = Number(data.StockDividendRatio) || 0
+      if (s.cashDividend !== 0 || s.stockDividendRatio !== 0) {
         dividendStocks.push(s)
       }
     })
 
     for (let i = 0; i < dividendStocks.length; i++) {
+      if (dividendStocks[i].shares <= 0) return
       const symbol = dividendStocks[i].symbol
       const userId = dividendStocks[i].userId
       await Record.create({
