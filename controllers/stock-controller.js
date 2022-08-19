@@ -19,7 +19,7 @@ const stockController = {
         profit: 0,
         roi: '0%'
       }
-      
+
       // pagination
       const limit = paginationLimit.homePage
       const page = Number(req.query.page) || 1

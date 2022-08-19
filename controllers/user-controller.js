@@ -27,16 +27,20 @@ const userController = {
       .then(user => {
         if (user) {
           req.flash('error_msg', '這個 Email 已被註冊')
-          return res.redirect('/users/signup')
+          return null
         }
         return bcrypt.hash(password, 10)
       })
-      .then(hash => User.create({
-        email,
-        name,
-        password: hash
-      }))
-      .then(() => {
+      .then(hash => {
+        if (!hash) return null
+        return User.create({
+          email,
+          name,
+          password: hash
+        })
+      })
+      .then(user => {
+        if (!user) return res.redirect('/users/signup')
         req.flash('success_msg', '註冊成功')
         res.redirect('/users/login')
       })
