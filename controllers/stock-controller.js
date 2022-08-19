@@ -63,7 +63,7 @@ const stockController = {
         }
         stock.roi = roi !== 'NaN%' ? roi : ''
         // calculate total marketCap & amount
-        if (stock.price.toString() !== 'NaN') {
+        if (stock.price.toString() !== 'NaN' && stock.shares > 0) {
           total.marketCap += stock.shares * stock.price
           total.amount += stock.value
         }
