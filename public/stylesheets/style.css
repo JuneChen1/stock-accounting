@@ -3,6 +3,10 @@ html, body {
   padding: 0;
 }
 
+#user-name {
+  cursor: default;
+}
+
 #login, #signup {
   min-width: 300px;
 }
