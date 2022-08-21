@@ -119,38 +119,41 @@ const stockController = {
       console.warn(err)
     }
   },
-  getRecords: (req, res) => {
-    const userId = req.user._id
-    const symbol = req.params.symbol
-    Record.find({ symbol, userId })
-      .lean()
-      .sort({ date: 'desc' })
-      .then(records => {
-        if (records.length === 0) {
-          return res.redirect('/')
-        }
-        records.forEach(record => {
-          record.date = moment(record.date).format('YYYY/MM/DD')
-        })
+  getRecords: async (req, res) => {
+    try {
+      const userId = req.user._id
+      const symbol = req.params.symbol
+      const records = await Record.find({ symbol, userId }).lean().sort({ date: 'desc' })
 
-        const limit = paginationLimit.detailPage
-        const page = Number(req.query.page) || 1
-        const offset = getOffset(limit, page)
-        const currentRecords = records.slice(offset, offset + limit)
-        const pagination = getPagination(limit, page, records.length)
-        res.locals.name = records[0].name
-        res.locals.symbol = symbol
-
-        res.render('detail', { records: currentRecords, pagination })
+      if (records.length === 0) {
+        return res.redirect('/')
+      }
+      records.forEach(record => {
+        record.date = moment(record.date).format('YYYY/MM/DD')
       })
-      .catch(err => console.warn(err))
+
+      const limit = paginationLimit.detailPage
+      const page = Number(req.query.page) || 1
+      const offset = getOffset(limit, page)
+      const currentRecords = records.slice(offset, offset + limit)
+      const pagination = getPagination(limit, page, records.length)
+      res.locals.name = records[0].name
+      res.locals.symbol = symbol
+
+      res.render('detail', { records: currentRecords, pagination })
+    } catch (err) {
+      console.warn(err)
+    }
   },
-  newRecordPage: (req, res) => {
-    const userId = req.user._id
-    const symbol = req.params.symbol
-    Stock.findOne({ symbol, userId })
-      .then(stock => res.render('new', { symbol, name: stock.name, theSymbol: true }))
-      .catch(err => console.warn(err))
+  newRecordPage: async (req, res) => {
+    try {
+      const userId = req.user._id
+      const symbol = req.params.symbol
+      const stock = await Stock.findOne({ symbol, userId })
+      res.render('new', { symbol, name: stock.name, theSymbol: true })
+    } catch (err) {
+      console.warn(err)
+    }
   },
   postRecord: async (req, res) => {
     try {
@@ -178,12 +181,15 @@ const stockController = {
       console.warn(err)
     }
   },
-  newDividendPage: (req, res) => {
-    const userId = req.user._id
-    const symbol = req.params.symbol
-    Stock.findOne({ symbol, userId })
-      .then(stock => res.render('dividend', { symbol, name: stock.name }))
-      .catch(err => console.warn(err))
+  newDividendPage: async (req, res) => {
+    try {
+      const userId = req.user._id
+      const symbol = req.params.symbol
+      const stock = await Stock.findOne({ symbol, userId })
+      res.render('dividend', { symbol, name: stock.name })
+    } catch (err) {
+      console.warn(err)
+    }
   },
   postDividend: async (req, res) => {
     try {
@@ -224,36 +230,35 @@ const stockController = {
       console.warn(err)
     }
   },
-  realizedProfitPage: (req, res) => {
-    const userId = req.user._id
-    Realized.find({ userId })
-      .lean()
-      .sort({ date: 'desc' })
-      .then(records => {
-        const total = {
-          cost: 0,
-          profit: 0,
-          roi: '0%'
-        }
-        records.forEach(record => {
-          total.cost += record.cost
-          total.profit += record.profit
-          record.date = moment(record.date).format('YYYY/MM/DD')
-        })
-        if (total.cost !== 0) {
-          total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
-        }
-        res.locals.realized = true
-
-        const limit = paginationLimit.realizedProfitPage
-        const page = Number(req.query.page) || 1
-        const offset = getOffset(limit, page)
-        const currentRecords = records.slice(offset, offset + limit)
-        const pagination = getPagination(limit, page, records.length)
-
-        res.render('realizedprofit', { records: currentRecords, total, pagination })
+  realizedProfitPage: async (req, res) => {
+    try {
+      const userId = req.user._id
+      const records = await Realized.find({ userId }).lean().sort({ date: 'desc' })
+      const total = {
+        cost: 0,
+        profit: 0,
+        roi: '0%'
+      }
+      records.forEach(record => {
+        total.cost += record.cost
+        total.profit += record.profit
+        record.date = moment(record.date).format('YYYY/MM/DD')
       })
-      .catch(err => console.warn(err))
+      if (total.cost !== 0) {
+        total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
+      }
+      res.locals.realized = true
+
+      const limit = paginationLimit.realizedProfitPage
+      const page = Number(req.query.page) || 1
+      const offset = getOffset(limit, page)
+      const currentRecords = records.slice(offset, offset + limit)
+      const pagination = getPagination(limit, page, records.length)
+
+      res.render('realizedprofit', { records: currentRecords, total, pagination })
+    } catch (err) {
+      console.warn(err)
+    }
   },
   deleteRealizedProfit: async (req, res) => {
     try {

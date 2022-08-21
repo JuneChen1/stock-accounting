@@ -5,7 +5,7 @@ const userController = {
   signUpPage: (req, res) => {
     res.render('signup')
   },
-  signUp: (req, res) => {
+  signUp: async (req, res) => {
     const { email, name, password, confirmPassword } = req.body
     const errors = []
     if (!email || !name || !password || !confirmPassword) {
@@ -23,28 +23,23 @@ const userController = {
         confirmPassword
       })
     }
-    User.findOne({ email })
-      .then(user => {
-        if (user) {
-          req.flash('error_msg', '這個 Email 已被註冊')
-          return null
-        }
-        return bcrypt.hash(password, 10)
+    try {
+      const user = await User.findOne({ email })
+      if (user) {
+        req.flash('error_msg', '這個 Email 已被註冊')
+        return res.redirect('/users/signup')
+      }
+      const hash = await bcrypt.hash(password, 10)
+      await User.create({
+        email,
+        name,
+        password: hash
       })
-      .then(hash => {
-        if (!hash) return null
-        return User.create({
-          email,
-          name,
-          password: hash
-        })
-      })
-      .then(user => {
-        if (!user) return res.redirect('/users/signup')
-        req.flash('success_msg', '註冊成功')
-        res.redirect('/users/login')
-      })
-      .catch(err => console.warn(err))
+      req.flash('success_msg', '註冊成功')
+      res.redirect('/users/login')
+    } catch (err) {
+      console.warn(err)
+    }
   },
   loginPage: (req, res) => {
     res.render('login')
