@@ -9,6 +9,10 @@ function updateStock (userId, symbol, del) {
   ])
     .then(([stock, records]) => {
       if (!stock) return 'no stock'
+      if (records.length === 0) {
+        stock.remove()
+        return 'no record'
+      }
       let value = 0
       let shares = 0
       records.forEach(record => {
@@ -43,9 +47,6 @@ function updateStock (userId, symbol, del) {
       stock.value = value
       stock.shares = shares
       stock.save()
-      if (shares === 0 && del) {
-        return 'no record'
-      }
     })
     .catch(err => console.warn(err))
 }
