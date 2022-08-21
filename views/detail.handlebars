@@ -1,7 +1,12 @@
 <div id="detail-region">
   {{> message}}
   <div class="content">
-    <h2>{{ symbol }} {{ name }}</h2>
+    <h2>
+      <a href="https://goodinfo.tw/tw/StockDetail.asp?STOCK_ID={{ symbol }}"
+       style="color: black; text-decoration: none;" target="_black">
+        {{ symbol }} {{ name }}
+      </a>
+    </h2>
     <table class="table table-striped" id="record-table">
       <thead>
         <tr>
@@ -30,11 +35,9 @@
         {{/each}}
       </tbody>
     </table>
-    {{!-- <a href="/stocks/{{ symbol }}/new" style="text-decoration: none;"> --}}
-      <button type="button" class="btn btn-dark" id="add-button" data-bs-toggle="modal" data-bs-target="#new-modal">
-        新增
-      </button>
-    {{!-- </a> --}}
+    <button type="button" class="btn btn-dark" id="add-button" data-bs-toggle="modal" data-bs-target="#new-modal">
+      新增
+    </button>
     <div class="modal" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-dialog">
