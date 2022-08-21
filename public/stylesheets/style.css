@@ -48,6 +48,17 @@ html, body {
   min-height: 650px;
 }
 
+#detail-region #new-modal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+  min-width: 290px;
+}
+
+#detail-region #new-modal-body button {
+  margin: 0.5rem 5rem;
+}
+
 #realized-profit {
   min-height: 650px;
   max-width: 900px;
