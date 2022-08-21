@@ -42,10 +42,21 @@
       <input type="datetime-local" class="form-control" id="date" aria-describedby="basic-addon3" name="date" required>
     </div>
 
-    <button type="submit" class="btn btn-dark mt-3">儲存</button>
-    <button type="button" class="btn btn-link mt-3 mx-2" onclick="history.back()">
-      取消
-    </button>
+    <div class="d-flex justify-content-between">
+      <div>
+        <button type="submit" class="btn btn-dark mt-3">儲存</button>
+        <button type="button" class="btn btn-link mt-3 mx-2" onclick="history.back()">
+          取消
+        </button>
+      </div>
+      {{#if theSymbol}}
+      <a href="/stocks/{{ symbol }}/dividend" style="text-decoration: none;">
+        <button type="button" class="btn btn-link mt-3 ms-2">
+          新增股利 →
+        </button>
+      </a>
+      {{/if}}
+    </div>
 
     <script>
       function searchName() {

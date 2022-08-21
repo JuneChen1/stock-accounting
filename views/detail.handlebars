@@ -35,32 +35,11 @@
         {{/each}}
       </tbody>
     </table>
-    <button type="button" class="btn btn-dark" id="add-button" data-bs-toggle="modal" data-bs-target="#new-modal">
-      新增
-    </button>
-    <div class="modal" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-body" id="new-modal-body">
-              <a href="/stocks/{{ symbol }}/new" style="text-decoration: none;">
-                <button type="button" class="btn btn-dark px-5">
-                  買賣
-                </button>
-              </a>
-              <a href="/stocks/{{ symbol }}/dividend" style="text-decoration: none;">
-                <button type="button" class="btn btn-dark px-5" id="add-button">
-                  股利
-                </button>
-              </a>
-              <button type="button" class="btn btn-link" data-bs-dismiss="modal">
-                取消
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <a href="/stocks/{{ symbol }}/new" style="text-decoration: none;">
+      <button type="button" class="btn btn-dark" id="add-button">
+        新增
+      </button>
+    </a>
   </div>
 
   <nav class="mt-3">

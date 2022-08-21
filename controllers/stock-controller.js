@@ -92,27 +92,34 @@ const stockController = {
         req.flash('error_msg', '所有欄位皆為必填')
         return res.redirect('back')
       }
+      value = Number(value)
+      shares = Number(shares)
       if (method === '賣出') {
         value = value * -1
         shares = shares * -1
       }
       symbol = symbol.trim()
       await Record.create({ symbol, name, method, value, shares, date, userId })
-      const update = await updateStock(userId, symbol)
-      if (update === 'no stock') {
-        await Stock.create([{
+      const stock = await Stock.findOne({ symbol, userId })
+      if (!stock) {
+        await Stock.create({
           symbol,
           name,
           shares,
           value,
           userId
-        }])
+        })
+        req.flash('success_msg', '新增成功')
+        return res.redirect('/')
       }
-      if (update === 'realized') {
+      stock.value += value
+      stock.shares += shares
+      if (stock.shares === 0) {
+        await updateStock(userId, symbol)
         req.flash('success_msg', '已新增至已實現損益')
-        res.redirect('/')
-        return
+        return res.redirect('/')
       }
+      stock.save()
       req.flash('success_msg', '新增成功')
       res.redirect('/')
     } catch (err) {
@@ -164,17 +171,26 @@ const stockController = {
         req.flash('error_msg', '所有欄位皆為必填')
         return res.redirect('back')
       }
+      value = Number(value)
+      shares = Number(shares)
       if (method === '賣出') {
         value = value * -1
         shares = shares * -1
       }
       await Record.create({ symbol, name, method, value, shares, date, userId })
-      const update = await updateStock(userId, symbol)
-      if (update === 'realized') {
-        req.flash('success_msg', '已新增至已實現損益')
-        res.redirect('/')
-        return
+      const stock = await Stock.findOne({ symbol, userId })
+      if (!stock) {
+        req.flash('error_msg', '股票不存在')
+        return res.redirect('back')
       }
+      stock.value += value
+      stock.shares += shares
+      if (stock.shares === 0) {
+        await updateStock(userId, symbol)
+        req.flash('success_msg', '已新增至已實現損益')
+        return res.redirect('/')
+      }
+      stock.save()
       req.flash('success_msg', '新增成功')
       res.redirect(`/stocks/${symbol}`)
     } catch (err) {
@@ -199,13 +215,20 @@ const stockController = {
         req.flash('error_msg', '代號、名稱、時間為必填!')
         return res.redirect('back')
       }
-      if (value < 0 || shares < 0) {
+      if (!value && !shares) {
+        req.flash('error_msg', '請輸入配發現金或配發股數')
+        return res.redirect('back')
+      }
+      if (Number(value) < 0 || Number(shares) < 0) {
         req.flash('error_msg', '配發現金、配發股數不可為負數!')
         return res.redirect('back')
       }
       const method = '股利'
       await Record.create({ symbol, name, method, value, shares, date, userId })
-      await updateStock(userId, symbol)
+      const stock = await Stock.findOne({ symbol, userId })
+      stock.value -= Number(value)
+      stock.shares += Number(shares)
+      await stock.save()
       req.flash('success_msg', '新增成功')
       res.redirect(`/stocks/${symbol}`)
     } catch (err) {
@@ -219,8 +242,8 @@ const stockController = {
       const symbol = req.params.symbol
       const record = await Record.findOne({ _id, userId })
       await record.remove()
-      const del = true
-      const update = await updateStock(userId, symbol, del)
+      const updateMethod = 'delete'
+      const update = await updateStock(userId, symbol, updateMethod)
       req.flash('success_msg', '刪除成功')
       if (update === 'no record') {
         return res.redirect('/')
