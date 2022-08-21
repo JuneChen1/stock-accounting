@@ -48,6 +48,27 @@ const userController = {
     req.logout()
     req.flash('success_msg', '成功登出')
     res.redirect('/users/login')
+  },
+  editName: async (req, res) => {
+    const _id = req.user._id
+    const { name } = req.body
+    if (!name) {
+      req.flash('error_msg', '名稱為必填')
+      return res.redirect('back')
+    }
+    const user = await User.findById(_id)
+    if (!user) {
+      req.flash('error_msg', '這個使用者不存在')
+      return res.redirect('back')
+    }
+    if (user.name === name) {
+      req.flash('success_msg', '儲存成功')
+      return res.redirect('back')
+    }
+    user.name = name
+    await user.save()
+    req.flash('success_msg', '儲存成功')
+    return res.redirect('back')
   }
 }
 

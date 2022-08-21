@@ -23,9 +23,30 @@
             <a class="nav-link {{#if realized}} active {{/if}}" href="/stocks/realizedprofit">已實現損益</a>
           </li>
         </ul>
-        <a class="nav-link active me-3" id="user-name" aria-current="page" style="color: white;">
+        <button type="button" id="user-name-button" class="btn btn-link me-3" data-bs-toggle="modal" data-bs-target="#edit-name-modal">
           {{ user.name }}
-        </a>
+        </button>
+        <div class="modal" id="edit-name-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title">編輯名稱</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="new-modal-body">
+                  <form action="/users/{{ user._id }}/edit?_method=PUT" method="POST">
+                    <label for="value" class="form-label">名稱</label>
+                    <div class="input-group mb-3">
+                      <input type="string" class="form-control" id="value" aria-describedby="basic-addon3" name="name" value="{{ user.name }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-dark mt-2 mx-auto px-5">儲存</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <form action="/users/logout">
           <button type="submit" class="btn btn-light">登出</button>
         </form>

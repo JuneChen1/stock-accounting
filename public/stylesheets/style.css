@@ -7,6 +7,18 @@ html, body {
   cursor: default;
 }
 
+#user-name-button {
+  text-decoration: none;
+  color: white;
+}
+
+#new-modal-body form {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  min-width: 135px;
+}
+
 #login, #signup {
   min-width: 300px;
 }
