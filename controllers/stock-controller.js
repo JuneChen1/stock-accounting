@@ -30,25 +30,23 @@ const stockController = {
       if (stocks.length === 0) {
         return res.render('index', { total, pagination })
       }
+      
       // get market price
       let symbolString = ''
       stocks.forEach(stock => {
         symbolString += `tse_${stock.symbol}.tw|`
       })
       const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
-      await axios.get(BASE_URL + symbolString)
-        .then(function (response) {
-          const dataArray = response.data.msgArray
-          for (let i = 0; i < dataArray.length; i++) {
-            let price = dataArray[i].z
-            if (price === '-') {
-              price = dataArray[i].y
-            }
-            stocks[i].price = Math.floor(price * 100) / 100
-          }
-        }).catch(function (error) {
-          console.warn(error)
-        })
+      const response = await axios.get(BASE_URL + symbolString)
+      const dataArray = response.data.msgArray
+      for (let i = 0; i < dataArray.length; i++) {
+        let price = dataArray[i].z
+        if (price === '-') {
+          price = dataArray[i].y
+        }
+        stocks[i].price = Math.floor(price * 100) / 100
+      }
+
       stocks.forEach(stock => {
         // calculate average cost
         const cost = Math.round((stock.value / stock.shares) * 10) / 10
