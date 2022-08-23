@@ -15,7 +15,7 @@
      <span style="font-size: small;">(輸入代號自動搜尋名稱)</span>
     {{/if}}
     <div class="input-group mb-3">
-      <input type="text" class="form-control" id="name" aria-describedby="basic-addon3" 
+      <input type="text" class="form-control" id="stock-name" aria-describedby="basic-addon3" 
       name="name" value="{{ name }}" readonly="readonly" required>
     </div>
 
@@ -60,17 +60,17 @@
 
     <script>
       function searchName() {
-        document.querySelector('#name').value = '搜尋中...'
+        document.querySelector('#stock-name').value = '搜尋中...'
         const symbol = document.querySelector('#symbol').value.trim()
         axios.get(`/api/search/${symbol}`)
           .then(response => {
             const data = response.data
             if (data.message === "symbol didn't exist") {
               document.querySelector('.err-msg').innerText = `找不到股票代號: ${symbol}`
-              document.querySelector('#name').value = ''
+              document.querySelector('#stock-name').value = ''
               return
             }
-            document.querySelector('#name').value = data.name
+            document.querySelector('#stock-name').value = data.name
             document.querySelector('.err-msg').innerText = ''
           }).catch(err => console.warn(err))
       }
