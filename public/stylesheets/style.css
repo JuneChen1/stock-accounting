@@ -21,6 +21,7 @@ html, body {
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
+  margin: 0 1.5rem;
   min-width: 135px;
 }
 
@@ -116,6 +117,10 @@ html, body {
   #new-region, #new-dividend-region {
     width: 65%;
     max-width: 330px;
+  }
+  #new-modal-body form {
+    margin: 0 3rem;
+
   }
 }
 

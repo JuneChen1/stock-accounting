@@ -30,7 +30,7 @@ const stockController = {
       if (stocks.length === 0) {
         return res.render('index', { total, pagination })
       }
-      
+
       // get market price
       let symbolString = ''
       stocks.forEach(stock => {

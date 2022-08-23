@@ -12,6 +12,6 @@ router.post('/login', passport.authenticate('local', {
   failureRedirect: '/users/login'
 }))
 router.get('/logout', userController.logout)
-router.put('/:id/edit', authenticated, userController.editName)
+router.put('/:id/edit', authenticated, userController.editProfile)
 
 module.exports = router

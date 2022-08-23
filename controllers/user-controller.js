@@ -49,12 +49,16 @@ const userController = {
     req.flash('success_msg', '成功登出')
     res.redirect('/users/login')
   },
-  editName: async (req, res) => {
+  editProfile: async (req, res) => {
     try {
       const _id = req.user._id
-      const { name } = req.body
+      const { name, password, confirmPassword } = req.body
       if (!name) {
         req.flash('error_msg', '名稱為必填')
+        return res.redirect('back')
+      }
+      if (password !== confirmPassword) {
+        req.flash('error_msg', '密碼與確認密碼不相符！')
         return res.redirect('back')
       }
       const user = await User.findById(_id)
@@ -62,11 +66,15 @@ const userController = {
         req.flash('error_msg', '這個使用者不存在')
         return res.redirect('back')
       }
-      if (user.name === name) {
+      if (user.name === name && !password) {
         req.flash('success_msg', '儲存成功')
         return res.redirect('back')
       }
       user.name = name
+      if (password) {
+        const hash = await bcrypt.hash(password, 10)
+        user.password = hash
+      }
       await user.save()
       req.flash('success_msg', '儲存成功')
       return res.redirect('back')
