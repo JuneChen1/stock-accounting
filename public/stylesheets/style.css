@@ -12,6 +12,11 @@ html, body {
   color: white;
 }
 
+#modal-second {
+  display: flex;
+  justify-content: center;
+}
+
 #new-modal-body form {
   display: flex;
   flex-direction: column;
