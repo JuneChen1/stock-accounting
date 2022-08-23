@@ -52,6 +52,14 @@ html, body {
   padding: 0 0.5rem;
 }
 
+#index-region .stock-name, #realized-profit .stock-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2
+}
+
 #detail-region {
   margin: 2rem auto 0 auto;
   padding: 0 1rem;

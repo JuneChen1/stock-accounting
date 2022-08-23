@@ -41,8 +41,10 @@
       <tbody>
         {{#each records}}
         <tr>
-          <th scope="row" class="name">{{ this.symbol }}</th>
-          <td class="name">{{ this.name }}</td>
+          <th scope="row" class="symbol">{{ this.symbol }}</th>
+          <td class="name">
+            <div class="stock-name">{{ this.name }}</div>
+          </td>
           <td class="cost">{{ this.cost }}</td>
           <td class="profit">{{ this.profit }}</td>
           <td class="roi">{{ this.roi }}</td>

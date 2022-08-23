@@ -39,12 +39,14 @@
       <tbody>
         {{#each stocks}}
         <tr>
-          <th scope="row" class="name">
+          <th scope="row" class="symbol">
             <a href="/stocks/{{ this.symbol }}" style="text-decoration: none; color: black;">
               {{ this.symbol }}
             </a>
           </th>
-          <td class="name">{{ this.name }}</td>
+          <td class="name">
+            <div class="stock-name">{{ this.name }}</div>
+          </td>
           <td class="shares">{{ this.shares }}</td>
           <td class="cost">{{ this.cost }}</td>
           <td class="price">{{ this.price }}</td>
