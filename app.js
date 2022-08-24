@@ -10,6 +10,7 @@ const { create } = require('express-handlebars')
 const exphbs = create({ defaultLayout: 'main', helpers: handlebarsHelper })
 const methodOverride = require('method-override')
 const session = require('express-session')
+const MemoryStore = require('memorystore')(session)
 const flash = require('connect-flash')
 const usePassport = require('./config/passport')
 
@@ -28,7 +29,11 @@ app.use(express.urlencoded({ extended: true }))
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { maxAge: 86400000 },
+  store: new MemoryStore({
+    checkPeriod: 86400000
+  }),
 }))
 usePassport(app)
 app.use(flash())
