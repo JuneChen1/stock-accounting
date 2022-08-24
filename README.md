@@ -47,6 +47,7 @@ mongodb connected
 ## 環境建置
 + Node.js 16.15.0
 + Express 4.18.1
++ Memorystore 1.6.7
 + Express-handlebars 6.0.6
 + Mongoose 6.3.8
 + Bootstrap 5.1.3
