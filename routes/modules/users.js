@@ -12,6 +12,10 @@ router.post('/login', passport.authenticate('local', {
   failureRedirect: '/users/login'
 }))
 router.get('/logout', userController.logout)
+router.get('/password/new', userController.forgotPasswordPage)
+router.post('/password/new', userController.forgotPassword)
+router.get('/password/reset/:token', userController.resetPasswordPage)
+router.post('/password/reset', userController.resetPassword)
 router.put('/:id/edit', authenticated, userController.editProfile)
 
 module.exports = router

@@ -33,7 +33,7 @@ html, body {
   width: 65%;
 }
 
-#new-region, #new-dividend-region {
+#new-region, #new-dividend-region, #forgot-password {
   width: 65%;
   min-width: 280px;
   margin: 0 auto;
@@ -114,7 +114,7 @@ html, body {
   #index-region .card {
     width: 400px;
   }
-  #new-region, #new-dividend-region {
+  #new-region, #new-dividend-region, #forgot-password {
     width: 65%;
     max-width: 330px;
   }
