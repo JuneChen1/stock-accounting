@@ -45,9 +45,19 @@
     <div class="d-flex justify-content-between">
       <div>
         <button type="submit" class="btn btn-dark mt-3">儲存</button>
-        <button type="button" class="btn btn-link mt-3 mx-2" onclick="history.back()">
-          取消
-        </button>
+        {{#if theSymbol}}
+          <a href="/stocks/{{ symbol }}" style="text-decoration: none;">
+            <button type="button" class="btn btn-link mt-3 mx-2">
+              取消
+            </button>
+          </a>
+        {{else}}
+          <a href="/" style="text-decoration: none;">
+            <button type="button" class="btn btn-link mt-3 mx-2">
+              取消
+            </button>
+          </a>
+        {{/if}}
       </div>
       {{#if theSymbol}}
       <a href="/stocks/{{ symbol }}/dividend" style="text-decoration: none;">
