@@ -61,3 +61,4 @@ mongodb connected
 + Bcryptjs 2.4.3
 + Node-schedule 2.1.0
 + Sweetalert2 11.4.28
++ Nodemailer 6.7.8
