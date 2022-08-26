@@ -26,7 +26,7 @@ async function dividendSchedule () {
       const data = todayDividend.find(d => d.Code === s.symbol)
       if (!data) return
       s.cashDividend = Number(data.CashDividend) || 0
-      s.stockDividendRatio = Number(data.StockDividendRatio) || 0
+      s.stockDividendRatio = Number(data.StockDividendRatio) * 10 || 0
       if (s.cashDividend !== 0 || s.stockDividendRatio !== 0) {
         dividendStocks.push(s)
       }
