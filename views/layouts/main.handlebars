@@ -22,6 +22,9 @@
           <li class="nav-item">
             <a class="nav-link {{#if realized}} active {{/if}}" href="/stocks/realizedprofit">已實現損益</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://hackmd.io/@RG9cKZ2IS4C8Z69gXipgAA/Sy2X8mtJi" target="_black">使用說明</a>
+          </li>
         </ul>
         <button type="button" id="user-name-button" class="btn btn-link me-3" data-bs-toggle="modal" data-bs-target="#edit-name-modal">
           {{ user.name }}
@@ -60,6 +63,12 @@
         <form action="/users/logout">
           <button type="submit" class="btn btn-light">登出</button>
         </form>
+      {{else}}
+        <ul class="navbar-nav me-auto mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="https://hackmd.io/@RG9cKZ2IS4C8Z69gXipgAA/Sy2X8mtJi" target="_black">使用說明</a>
+          </li>
+        </ul>
       {{/if}}
     </div>
   </nav>
