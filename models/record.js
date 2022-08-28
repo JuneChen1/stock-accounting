@@ -13,6 +13,9 @@ const recordSchema = new Schema({
     type: String,
     required: true
   },
+  price: {
+    type: Number
+  },
   value: {
     type: Number,
     default: 0

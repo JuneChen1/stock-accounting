@@ -85,7 +85,7 @@ const stockController = {
   postStock: async (req, res) => {
     try {
       const userId = req.user._id
-      let { symbol, name, method, value, shares, date } = req.body
+      let { symbol, name, method, price, value, shares, date } = req.body
       if (!symbol || !name || !method || !value || !shares || !date) {
         req.flash('error_msg', '所有欄位皆為必填')
         return res.redirect('back')
@@ -97,7 +97,7 @@ const stockController = {
         shares = shares * -1
       }
       symbol = symbol.trim()
-      await Record.create({ symbol, name, method, value, shares, date, userId })
+      await Record.create({ symbol, name, method, price, value, shares, date, userId })
       const stock = await Stock.findOne({ symbol, userId })
       if (!stock) {
         await Stock.create({
@@ -164,7 +164,7 @@ const stockController = {
     try {
       const userId = req.user._id
       const symbol = req.params.symbol
-      let { name, method, value, shares, date } = req.body
+      let { name, method, price, value, shares, date } = req.body
       if (!symbol || !name || !method || !value || !shares || !date) {
         req.flash('error_msg', '所有欄位皆為必填')
         return res.redirect('back')
@@ -175,7 +175,7 @@ const stockController = {
         value = value * -1
         shares = shares * -1
       }
-      await Record.create({ symbol, name, method, value, shares, date, userId })
+      await Record.create({ symbol, name, method, price, value, shares, date, userId })
       const stock = await Stock.findOne({ symbol, userId })
       if (!stock) {
         req.flash('error_msg', '股票不存在')
