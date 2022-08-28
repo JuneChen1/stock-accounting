@@ -240,12 +240,16 @@ const stockController = {
       const symbol = req.params.symbol
       const record = await Record.findOne({ _id, userId })
       await record.remove()
-      const updateMethod = 'delete'
-      const update = await updateStock(userId, symbol, updateMethod)
-      req.flash('success_msg', '刪除成功')
+      const update = await updateStock(userId, symbol)
       if (update === 'no record') {
+        req.flash('success_msg', '刪除成功')
         return res.redirect('/')
       }
+      if (update === 'realized') {
+        req.flash('success_msg', '已新增至已實現損益')
+        return res.redirect('/')
+      }
+      req.flash('success_msg', '刪除成功')
       res.redirect(`/stocks/${symbol}`)
     } catch (err) {
       console.warn(err)

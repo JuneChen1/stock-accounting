@@ -2,7 +2,7 @@ const Stock = require('../models/stock')
 const Record = require('../models/record')
 const Realized = require('../models/realized-profit')
 
-function updateStock (userId, symbol, updateMethod) {
+function updateStock (userId, symbol) {
   return Promise.all([
     Stock.findOne({ symbol, userId }),
     Record.find({ symbol, userId })
@@ -25,7 +25,7 @@ function updateStock (userId, symbol, updateMethod) {
         shares += record.shares
       })
       // realized profit
-      if (shares === 0 && updateMethod !== 'delete') {
+      if (shares === 0) {
         stock.remove()
         let cost = 0
         records.forEach(record => {
