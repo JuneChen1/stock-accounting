@@ -1,0 +1,59 @@
+<div class="my-5" id="new-region">
+  {{> message}}
+  <form action="/stocks/records/{{ record._id }}/edit?_method=PATCH" method="POST">
+    <label for="symbol" class="form-label">股票代號：</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" name="symbol"
+        value="{{ record.symbol }}" readonly="readonly" required>
+    </div>
+
+    <label for="name" class="form-label mt-3">股票名稱：</label>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="stock-name" aria-describedby="basic-addon3" name="name"
+        value="{{ record.name }}" readonly="readonly" required>
+    </div>
+
+    <div class="input-group mb-3">
+      <label for="method" class="form-label">買入/賣出：</label>
+      <select class="form-select" id="method" style="width: 100%;" name="method">
+        <option {{#ifCond record.method "買入"}} selected {{/ifCond}} value="買入">買入</option>
+        <option {{#ifCond record.method "賣出"}} selected {{/ifCond}} value="賣出">賣出</option>
+      </select>
+    </div>
+
+    <label for="price" class="form-label">價格：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="price" aria-describedby="basic-addon3" min="0" name="price"
+      value="{{ record.price }}">
+    </div>
+
+    <label for="value" class="form-label">總額：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" min="0" name="value"
+      value="{{ record.value }}"  required>
+    </div>
+
+    <label for="shares" class="form-label">股數：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3" min="0" name="shares"
+      value="{{ record.shares }}"  required>
+    </div>
+
+    <label for="date" class="form-label">時間：</label>
+    <div class="input-group mb-3">
+      <input type="datetime-local" class="form-control" id="date" aria-describedby="basic-addon3" name="date"
+      value="{{ record.date }}" required>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <div>
+        <button type="submit" class="btn btn-dark mt-3">儲存</button>
+        <a href="/stocks/{{ record.symbol }}" style="text-decoration: none;">
+          <button type="button" class="btn btn-link mt-3 mx-2">
+            取消
+          </button>
+        </a>
+      </div>
+    </div>
+  </form>
+</div>

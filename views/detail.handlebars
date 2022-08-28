@@ -10,11 +10,11 @@
     <table class="table table-striped" id="record-table">
       <thead>
         <tr>
-          <th scope="col" style="width: 16%">紀錄</th>
-          <th scope="col" style="width: 16%">價格</th>
-          <th scope="col" style="width: 16%">總額</th>
-          <th scope="col" style="width: 16%">股數</th>
-          <th scope="col" style="width: 29%">日期</th>
+          <th scope="col" style="width: 17%">紀錄</th>
+          <th scope="col" style="width: 17%">價格</th>
+          <th scope="col" style="width: 18%">總額</th>
+          <th scope="col" style="width: 17%">股數</th>
+          <th scope="col" style="width: 26%">日期</th>
           <th scope="col" style="width: 5%;"></th>
         </tr>
       </thead>
@@ -26,7 +26,11 @@
           <td class="value">{{ this.value }}</td>
           <td class="shares">{{ this.shares }}</td>
           <td class="date">{{ this.date }}</td>
-          <td>
+          <td class="d-flex align-items-center">
+            <a href="/stocks/records/{{this._id}}/edit">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            <div id="edit-delete-space"></div>
             <form action="/stocks/{{ this.symbol }}/{{this._id}}?_method=DELETE" method="POST">
               <button type="submit" style="border: none; background-color: transparent;" onclick="return confirm(`確定刪除？`)">
                 <i class="fa-solid fa-trash-can"></i>

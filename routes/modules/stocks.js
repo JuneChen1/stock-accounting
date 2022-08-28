@@ -18,6 +18,9 @@ router.post('/:symbol/dividend/new', stockController.postDividend)
 
 // delete record
 router.delete('/:symbol/:id', stockController.deleteRecord)
+// edit record
+router.get('/records/:id/edit', stockController.editRecordPage)
+router.patch('/records/:id/edit', stockController.editRecord)
 
 // records of specific stock
 router.get('/:symbol', stockController.getRecords)

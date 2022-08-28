@@ -69,7 +69,7 @@ html, body {
 #detail-region {
   margin: 2rem auto 0 auto;
   padding: 0 1rem;
-  max-width: 650px;
+  max-width: 620px;
   min-width: 468px;
   min-height: 650px;
 }
@@ -103,8 +103,12 @@ html, body {
   padding: 0 0.5rem;
 }
 
-.fa-trash-can {
+.fa-trash-can, .fa-pen-to-square {
   color: #3B3B3B;
+}
+
+#edit-delete-space {
+  width: 0.3rem;
 }
 
 @media screen and (min-width: 486px) {
@@ -121,6 +125,9 @@ html, body {
   #new-modal-body form {
     margin: 0 3rem;
 
+  }
+  #edit-delete-space {
+    width: 1.2rem;
   }
 }
 

@@ -117,7 +117,7 @@ const stockController = {
         req.flash('success_msg', '已新增至已實現損益')
         return res.redirect('/')
       }
-      stock.save()
+      await stock.save()
       req.flash('success_msg', '新增成功')
       res.redirect('/')
     } catch (err) {
@@ -188,7 +188,7 @@ const stockController = {
         req.flash('success_msg', '已新增至已實現損益')
         return res.redirect('/')
       }
-      stock.save()
+      await stock.save()
       req.flash('success_msg', '新增成功')
       res.redirect(`/stocks/${symbol}`)
     } catch (err) {
@@ -247,6 +247,55 @@ const stockController = {
         return res.redirect('/')
       }
       res.redirect(`/stocks/${symbol}`)
+    } catch (err) {
+      console.warn(err)
+    }
+  },
+  editRecordPage: async (req, res) => {
+    try {
+      const id = req.params.id
+      const record = await Record.findById(id).lean()
+      if (!record) {
+        req.flash('error_msg', '紀錄不存在')
+        return res.redirect('back')
+      }
+      if (record.method === '賣出') {
+        record.value = record.value * -1
+        record.shares = record.shares * -1
+      }
+      record.date = moment(record.date).format('YYYY-MM-DDThh:mm')
+      res.render('edit-record', { record })
+    } catch (err) {
+      console.warn(err)
+    }
+  },
+  editRecord: async (req, res) => {
+    try {
+      const id = req.params.id
+      let { method, price, value, shares, date } = req.body
+      const record = await Record.findById(id)
+      if (!record) {
+        req.flash('error_msg', '紀錄不存在')
+        return res.redirect('back')
+      }
+      if (method === '賣出') {
+        value = value * -1
+        shares = shares * -1
+      }
+      record.method = method
+      record.price = price
+      record.value = value
+      record.shares = shares
+      record.date = date
+      await record.save()
+
+      const update = await updateStock(record.userId, record.symbol)
+      if (update === 'realized') {
+        req.flash('success_msg', '已新增至已實現損益')
+        return res.redirect('/')
+      }
+      req.flash('success_msg', '編輯成功')
+      res.redirect(`/stocks/${record.symbol}`)
     } catch (err) {
       console.warn(err)
     }
