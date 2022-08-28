@@ -19,10 +19,8 @@
       <a class="navbar-brand" href="/">股票記帳</a>
       {{#if isAuthenticated}}
         <ul class="navbar-nav me-auto mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link {{#if realized}} active {{/if}}" href="/stocks/realizedprofit">已實現損益</a>
-          </li>
-          <li class="nav-item">
+          <li class="nav-item d-flex">
+            <a class="nav-link me-2 {{#if realized}} active {{/if}}" href="/stocks/realizedprofit">已實現損益</a>
             <a class="nav-link" href="https://hackmd.io/@RG9cKZ2IS4C8Z69gXipgAA/Sy2X8mtJi" target="_black">使用說明</a>
           </li>
         </ul>
