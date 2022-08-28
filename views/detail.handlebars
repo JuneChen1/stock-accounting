@@ -26,10 +26,13 @@
           <td class="value">{{ this.value }}</td>
           <td class="shares">{{ this.shares }}</td>
           <td class="date">{{ this.date }}</td>
-          <td class="d-flex align-items-center">
-            <a href="/stocks/records/{{this._id}}/edit">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </a>
+          <td class="d-flex align-items-center justify-content-between">
+            {{#ifCond this.method '股利'}}
+            {{else}}
+              <a href="/stocks/records/{{this._id}}/edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+            {{/ifCond}}
             <div id="edit-delete-space"></div>
             <form action="/stocks/{{ this.symbol }}/{{this._id}}?_method=DELETE" method="POST">
               <button type="submit" style="border: none; background-color: transparent;" onclick="return confirm(`確定刪除？`)">
