@@ -17,6 +17,9 @@ const stockSchema = new Schema({
     type: Number,
     required: true
   },
+  list: {
+    type: String
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',

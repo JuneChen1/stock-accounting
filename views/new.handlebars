@@ -47,6 +47,8 @@
       <input type="datetime-local" class="form-control" id="date" aria-describedby="basic-addon3" name="date" required>
     </div>
 
+    <input type="hidden" id="list" name="list" required>
+
     <div class="d-flex justify-content-between">
       <div>
         <button type="submit" class="btn btn-dark mt-3">儲存</button>
@@ -75,8 +77,9 @@
 
     <script>
       function searchName() {
-        document.querySelector('#stock-name').value = '搜尋中...'
         const symbol = document.querySelector('#symbol').value.trim()
+        if (symbol.length === 0) return
+        document.querySelector('#stock-name').value = '搜尋中...'
         axios.get(`/api/search/${symbol}`)
           .then(response => {
             const data = response.data
@@ -87,6 +90,7 @@
             }
             document.querySelector('#stock-name').value = data.name
             document.querySelector('.err-msg').innerText = ''
+            document.querySelector('#list').value = data.list
           }).catch(err => console.warn(err))
       }
     </script>

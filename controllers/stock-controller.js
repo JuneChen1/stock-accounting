@@ -34,7 +34,8 @@ const stockController = {
       // get market price
       let symbolString = ''
       stocks.forEach(stock => {
-        symbolString += `tse_${stock.symbol}.tw|`
+        const list = stock.list ? stock.list : 'tse'
+        symbolString += `${list}_${stock.symbol}.tw|`
       })
       const BASE_URL = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='
       const response = await axios.get(BASE_URL + symbolString)
@@ -61,7 +62,7 @@ const stockController = {
         }
         stock.roi = roi !== 'NaN%' ? roi : ''
         // calculate total marketCap & amount
-        if (stock.price.toString() !== 'NaN' && stock.shares > 0) {
+        if (stock.price && stock.shares > 0) {
           total.marketCap += stock.shares * stock.price
           total.amount += stock.value
         }
@@ -85,7 +86,7 @@ const stockController = {
   postStock: async (req, res) => {
     try {
       const userId = req.user._id
-      let { symbol, name, method, price, value, shares, date } = req.body
+      let { symbol, name, method, price, value, shares, date, list } = req.body
       if (!symbol || !name || !method || !value || !shares || !date) {
         req.flash('error_msg', '所有欄位皆為必填')
         return res.redirect('back')
@@ -105,6 +106,7 @@ const stockController = {
           name,
           shares,
           value,
+          list,
           userId
         })
         req.flash('success_msg', '新增成功')
