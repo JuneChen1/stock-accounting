@@ -107,7 +107,7 @@ const userController = {
         from: process.env.MY_EMAIL,
         to: user.email,
         subject: '重設密碼',
-        html: `<p>${user.name} 您好</p><p>請點以下連結重新設定密碼：</p><a href="http://${process.env.HOST}/users/password/reset/${token}">重設密碼連結</a><br/><br/><p>連結會在 1 小時後或重設密碼後失效</p>`
+        html: `<p>${user.name} 您好</p><p>請點以下連結重新設定密碼：</p><a href="${process.env.HOST}/users/password/reset/${token}">重設密碼連結</a><br/><br/><p>連結會在 1 小時後或重設密碼後失效</p>`
       })
 
       user.resetToken = token
