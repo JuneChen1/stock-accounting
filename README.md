@@ -1,7 +1,13 @@
 # 簡易股票記帳
 台股買賣紀錄、股利發放紀錄以及損益試算。
 ## 網頁連結
-[https://stock-accounting.herokuapp.com](https://stock-accounting.herokuapp.com)
+[https://stock-accounting.herokuapp.com](https://stock-accounting.herokuapp.com)  
+  
+可使用種子帳號登入：
+```
+Email：seed@example.com
+密碼：seed
+```
 ## 功能說明
 + 使用者可註冊帳號
 + 使用者可修改名稱與密碼
