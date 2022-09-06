@@ -4,7 +4,6 @@
 [https://stock-accounting.herokuapp.com](https://stock-accounting.herokuapp.com)
 ## 功能說明
 + 使用者可註冊帳號
-+ 使用者可使用帳號與密碼登入
 + 使用者可修改名稱與密碼
 + 忘記密碼時可進行重設
 + 可新增、修改和刪除股票買賣紀錄
