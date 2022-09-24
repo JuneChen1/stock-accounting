@@ -91,7 +91,7 @@ const stockController = {
     }
   },
   newStockPage: (req, res) => {
-    const defaultDate = moment(Date.now()).format('YYYY-MM-DDThh:mm')
+    const defaultDate = moment(Date.now()).format().slice(0, 16)
     res.render('new', { newSymbol: true, defaultDate })
   },
   postStock: async (req, res) => {
@@ -168,7 +168,7 @@ const stockController = {
       const userId = req.user._id
       const symbol = req.params.symbol
       const stock = await Stock.findOne({ symbol, userId })
-      const defaultDate = moment(Date.now()).format('YYYY-MM-DDThh:mm')
+      const defaultDate = moment(Date.now()).format().slice(0, 16)
       res.render('new', { symbol, name: stock.name, theSymbol: true, defaultDate })
     } catch (err) {
       console.warn(err)
@@ -281,7 +281,7 @@ const stockController = {
         record.value = record.value * -1
         record.shares = record.shares * -1
       }
-      record.date = moment(record.date).format('YYYY-MM-DDThh:mm')
+      record.date = moment(record.date).format().slice(0, 16)
       res.render('edit-record', { record })
     } catch (err) {
       console.warn(err)
