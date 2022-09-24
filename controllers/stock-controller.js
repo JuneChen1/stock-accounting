@@ -329,9 +329,19 @@ const stockController = {
         total.cost += record.cost
         total.profit += record.profit
         record.date = moment(record.date).format('YYYY/MM/DD')
+        if (record.profit > 0) {
+          record.win = true
+        } else if (record.profit < 0) {
+          record.loss = true
+        }
       })
       if (total.cost !== 0) {
         total.roi = (Math.round((total.profit / total.cost) * 100)).toString() + '%'
+      }
+      if (total.profit > 0) {
+        total.win = true
+      } else if (total.profit < 0) {
+        total.loss = true
       }
       res.locals.realized = true
 
