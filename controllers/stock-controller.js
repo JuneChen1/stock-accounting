@@ -91,7 +91,8 @@ const stockController = {
     }
   },
   newStockPage: (req, res) => {
-    res.render('new', { newSymbol: true })
+    const defaultDate = moment(Date.now()).format('YYYY-MM-DDThh:mm')
+    res.render('new', { newSymbol: true, defaultDate })
   },
   postStock: async (req, res) => {
     try {
@@ -167,7 +168,8 @@ const stockController = {
       const userId = req.user._id
       const symbol = req.params.symbol
       const stock = await Stock.findOne({ symbol, userId })
-      res.render('new', { symbol, name: stock.name, theSymbol: true })
+      const defaultDate = moment(Date.now()).format('YYYY-MM-DDThh:mm')
+      res.render('new', { symbol, name: stock.name, theSymbol: true, defaultDate })
     } catch (err) {
       console.warn(err)
     }

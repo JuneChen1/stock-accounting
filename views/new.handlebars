@@ -5,7 +5,7 @@
     <div class="input-group">
       <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" 
       name="symbol" value="{{ symbol }}" {{#if theSymbol}} readonly="readonly" {{/if}}
-      onblur="searchName()" required>
+      onblur="searchName()" placeholder="股票代號 ex.0050" required>
     </div>
 
     <div style="color: #c81921;" class="mt-1 err-msg"></div>
@@ -16,7 +16,7 @@
     {{/if}}
     <div class="input-group mb-3">
       <input type="text" class="form-control" id="stock-name" aria-describedby="basic-addon3" 
-      name="name" value="{{ name }}" readonly="readonly" required>
+      placeholder="元大台灣50" name="name" value="{{ name }}" readonly="readonly" required>
     </div>
 
     <div class="input-group mb-3">
@@ -29,22 +29,26 @@
 
     <label for="price" class="form-label">價格：</label>
     <div class="input-group mb-3">
-      <input type="number" class="form-control" id="price" aria-describedby="basic-addon3" min="0.01" step="0.01" name="price">
+      <input type="number" class="form-control" id="price" aria-describedby="basic-addon3"
+      placeholder="買入/賣出價格" min="0.01" step="0.01" name="price">
     </div>
 
     <label for="value" class="form-label">總額：</label>
     <div class="input-group mb-3">
-      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" min="0" name="value" required>
+      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3"
+      placeholder="成本+手續費+(證交稅)" min="0" name="value" required>
     </div>
 
     <label for="shares" class="form-label">股數：</label>
     <div class="input-group mb-3">
-      <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3" min="0" name="shares" required>
+      <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3"
+      placeholder="買入/賣出股數" min="0" name="shares" required>
     </div>
 
     <label for="date" class="form-label">時間：</label>
     <div class="input-group mb-3">
-      <input type="datetime-local" class="form-control" id="date" aria-describedby="basic-addon3" name="date" required>
+      <input type="datetime-local" class="form-control" id="date" aria-describedby="basic-addon3"
+      name="date" value="{{ defaultDate }}" required>
     </div>
 
     <input type="hidden" id="list" name="list" required>

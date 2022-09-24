@@ -24,19 +24,19 @@
     <label for="price" class="form-label">價格：</label>
     <div class="input-group mb-3">
       <input type="number" class="form-control" id="price" aria-describedby="basic-addon3" min="0.01" step="0.01"
-      name="price" value="{{ record.price }}">
+      placeholder="買入/賣出價格" name="price" value="{{ record.price }}">
     </div>
 
     <label for="value" class="form-label">總額：</label>
     <div class="input-group mb-3">
       <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" min="0" name="value"
-      value="{{ record.value }}"  required>
+      placeholder="成本+手續費+(證交稅)" value="{{ record.value }}"  required>
     </div>
 
     <label for="shares" class="form-label">股數：</label>
     <div class="input-group mb-3">
       <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3" min="0" name="shares"
-      value="{{ record.shares }}"  required>
+      placeholder="買入/賣出股數" value="{{ record.shares }}"  required>
     </div>
 
     <label for="date" class="form-label">時間：</label>
