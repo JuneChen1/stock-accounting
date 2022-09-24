@@ -55,6 +55,11 @@ const stockController = {
         // calculate profit and loss
         const profit = (Math.round((stock.price * stock.shares - stock.value) * 10) / 10).toString()
         stock.profit = profit !== 'NaN' ? profit : ''
+        if (profit > 0 && profit !== 'NaN') {
+          stock.win = true
+        } else if (profit < 0 && profit !== 'NaN') {
+          stock.loss = true
+        }
         // calculate ROI
         let roi = '-'
         if (cost > 0 && stock.shares > 0) {
@@ -74,6 +79,11 @@ const stockController = {
         roi = (Math.round(((total.marketCap - total.amount) / total.amount) * 100)).toString() + '%'
       }
       total.roi = roi
+      if (total.profit > 0) {
+        total.win = true
+      } else if (total.profit < 0) {
+        total.loss = true
+      }
 
       res.render('index', { stocks: currentStocks, total, pagination })
     } catch (err) {

@@ -13,11 +13,11 @@
         </div>
         <div>
           <h4>總損益</h4>
-          <h5 class="ps-1">{{ total.profit }}</h5>
+          <h5 class="ps-1 {{#if total.win}}profit-red{{/if}} {{#if total.loss}}profit-green{{/if}}">{{ total.profit }}</h5>
         </div>
         <div>
           <h4>總報酬率</h4>
-          <h5 class="ps-1">{{ total.roi }}</h5>
+          <h5 class="ps-1 {{#if total.win}}profit-red{{/if}} {{#if total.loss}}profit-green{{/if}}">{{ total.roi }}</h5>
         </div>
       </div>
     </div>
@@ -50,8 +50,12 @@
           <td class="shares">{{ this.shares }}</td>
           <td class="cost">{{ this.cost }}</td>
           <td class="price">{{ this.price }}</td>
-          <td class="profit">{{ this.profit }}</td>
-          <td class="roi">{{ this.roi }}</td>
+          <td class="profit {{#if this.win}}profit-red{{/if}} {{#if this.loss}}profit-green{{/if}}">
+            {{ this.profit }}
+          </td>
+          <td class="roi {{#if this.win}}profit-red{{/if}} {{#if this.loss}}profit-green{{/if}}">
+            {{ this.roi }}
+          </td>
         </tr>
         {{/each}}
       </tbody>

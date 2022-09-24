@@ -111,6 +111,14 @@ html, body {
   width: 0.3rem;
 }
 
+.profit-red {
+  color: red !important;
+}
+
+.profit-green {
+  color: rgb(55, 169, 47) !important;
+}
+
 @media screen and (min-width: 486px) {
   #login .form-items, #signup .form-items {
     width: 327px;
