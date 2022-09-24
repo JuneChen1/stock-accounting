@@ -1,10 +1,15 @@
 # 簡易股票記帳
 台股買賣紀錄、股利發放紀錄以及損益試算。
 ## 網頁連結
-[https://stock-accounting.herokuapp.com](https://stock-accounting.herokuapp.com)
+[https://stock-accounting.herokuapp.com](https://stock-accounting.herokuapp.com)  
+  
+可使用種子帳號登入：
+```
+Email：seed@example.com
+密碼：seed
+```
 ## 功能說明
 + 使用者可註冊帳號
-+ 使用者可使用帳號與密碼登入
 + 使用者可修改名稱與密碼
 + 忘記密碼時可進行重設
 + 可新增、修改和刪除股票買賣紀錄
@@ -62,3 +67,6 @@ mongodb connected
 + Node-schedule 2.1.0
 + Sweetalert2 11.4.28
 + Nodemailer 6.7.8
+## 筆記
+[自動記錄股利](https://medium.com/@juneee/%E4%BD%BF%E7%94%A8-node-schedule-%E8%87%AA%E5%8B%95%E8%A8%98%E9%8C%84%E8%82%A1%E5%88%A9-468af2943032)  
+[忘記密碼功能](https://medium.com/@juneee/%E4%BD%BF%E7%94%A8-node-js-%E5%AF%A6%E4%BD%9C%E5%BF%98%E8%A8%98%E5%AF%86%E7%A2%BC%E5%8A%9F%E8%83%BD-84b9fb8b1cb7)
