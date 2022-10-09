@@ -60,6 +60,6 @@ mongodb connected
 + Passport 0.4.1
 + Passport-local 1.0.0
 + Bcryptjs 2.4.3
-## 筆記
+## 相關部落格
 [自動記錄股利](https://medium.com/@juneee/%E4%BD%BF%E7%94%A8-node-schedule-%E8%87%AA%E5%8B%95%E8%A8%98%E9%8C%84%E8%82%A1%E5%88%A9-468af2943032)  
 [忘記密碼功能](https://medium.com/@juneee/%E4%BD%BF%E7%94%A8-node-js-%E5%AF%A6%E4%BD%9C%E5%BF%98%E8%A8%98%E5%AF%86%E7%A2%BC%E5%8A%9F%E8%83%BD-84b9fb8b1cb7)
