@@ -5,7 +5,7 @@
     <div class="input-group">
       <input type="text" class="form-control" id="symbol" aria-describedby="basic-addon3" 
       name="symbol" value="{{ symbol }}" {{#if theSymbol}} readonly="readonly" {{/if}}
-      onblur="searchName()" placeholder="股票代號 ex.0050" required>
+      onblur="searchName()" placeholder="ex.0050" required>
     </div>
 
     <div style="color: #c81921;" class="mt-1 err-msg"></div>
@@ -21,7 +21,7 @@
 
     <div class="input-group mb-3">
       <label for="method" class="form-label">買入/賣出：</label>
-      <select class="form-select" id="method" style="width: 100%;" name="method">
+      <select class="form-select" id="method" style="width: 100%;" name="method" onchange="changeBuySell()">
         <option selected value="買入">買入</option>
         <option value="賣出">賣出</option>
       </select>
@@ -30,19 +30,19 @@
     <label for="price" class="form-label">價格：</label>
     <div class="input-group mb-3">
       <input type="number" class="form-control" id="price" aria-describedby="basic-addon3"
-      placeholder="買入/賣出價格" min="0.01" step="0.01" name="price">
-    </div>
-
-    <label for="value" class="form-label">總額：</label>
-    <div class="input-group mb-3">
-      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3"
-      placeholder="成本+手續費+(證交稅)" min="0" name="value" required>
+      placeholder="ex.130" min="0.01" step="0.01" name="price">
     </div>
 
     <label for="shares" class="form-label">股數：</label>
     <div class="input-group mb-3">
       <input type="number" class="form-control" id="shares" aria-describedby="basic-addon3"
-      placeholder="買入/賣出股數" min="0" name="shares" required>
+      placeholder="ex.1000" min="0" name="shares" required>
+    </div>
+
+    <label for="value" class="form-label">淨收付：</label>
+    <div class="input-group mb-3">
+      <input type="number" class="form-control" id="value" aria-describedby="basic-addon3" placeholder="本金+手續費"
+        min="0" name="value" required>
     </div>
 
     <label for="date" class="form-label">時間：</label>
@@ -96,6 +96,17 @@
             document.querySelector('.err-msg').innerText = ''
             document.querySelector('#list').value = data.list
           }).catch(err => console.warn(err))
+      }
+      function changeBuySell(){
+        const method = document.querySelector('#method').value
+        {{!-- const value = document.querySelector('#value').value --}}
+        if (method === '買入') {
+          document.querySelector('#value').setAttribute('placeholder','本金+手續費')
+          return
+        }
+        if (method === '賣出') {
+          document.querySelector('#value').setAttribute('placeholder', '金額+手續費+證交稅')
+        }
       }
     </script>
   </form>
